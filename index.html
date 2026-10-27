@@ -1,0 +1,3473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Islaah Foundation's Aamaal Circle</title>
+
+  <!-- Android & Standard PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#072c28">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- Apple iOS / iPadOS PWA Support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Aamaal Circle">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="apple-touch-icon" href="logo.jpg">
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-soft: #f4f7f6;
+      --teal-dark: #072c28;
+      --teal-mid: #0b433d;
+      --teal-deep: #041917;
+      --accent-green: #bef264;
+      --mint-card: #d9ece8;
+      --mint-border: #bce0d8;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-soft);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .hidden { display: none !important; }
+
+    /* 1. SPLASH & LOGIN SCREEN */
+    #splash-screen {
+      background: linear-gradient(160deg, var(--teal-dark) 0%, var(--teal-mid) 55%, var(--teal-deep) 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 20px;
+    }
+    .welcome-label {
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #a7f3d0;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+    .logo-wrap {
+      width: 140px;
+      height: 140px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-title {
+      font-size: 23px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .brand-subtitle {
+      font-size: 13px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .auth-box {
+      width: 100%;
+      max-width: 360px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+      padding: 18px 16px;
+      backdrop-filter: blur(8px);
+    }
+    .google-btn {
+      width: 100%;
+      background: linear-gradient(90deg, #d9f99d 0%, #a7f3d0 100%);
+      color: #062c28;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    }
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .or-divider::before, .or-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.16);
+    }
+    .phone-toggle-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .phone-auth-panel {
+      margin-top: 14px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 14px;
+      border-radius: 18px;
+    }
+    .phone-mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 4px;
+      border-radius: 12px;
+    }
+    .phone-mode-tab {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 8px 6px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .phone-mode-tab.active {
+      background: #bef264;
+      color: #062c28;
+    }
+    .auth-input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.95);
+      color: #0f172a;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .phone-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .country-code-select {
+      width: 105px;
+      padding: 11px 6px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.95);
+      color: #0f172a;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .phone-submit-btn {
+      width: 100%;
+      background: #14b8a6;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .phone-submit-btn.register-mode {
+      background: linear-gradient(90deg, #bef264 0%, #86efac 100%);
+      color: #062c28;
+    }
+    .splash-loader { font-size: 13px; color: #a7f3d0; margin-top: 14px; }
+
+    /* MAIN APP WRAPPER */
+    #app-container {
+      max-width: 460px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 14px 14px 36px;
+    }
+
+    /* TOP BAR & QUICK MEMBER DROPDOWN */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-size: 18px;
+      color: var(--teal-dark);
+    }
+    .member-dropdown-wrapper { position: relative; }
+    .member-dropdown-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 9px 16px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .quick-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.14);
+      min-width: 220px;
+      z-index: 60;
+      padding: 6px;
+      overflow: hidden;
+    }
+    .quick-dropdown-item {
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .quick-dropdown-item.active {
+      background: #ecfdf5;
+      color: #0d9488;
+      font-weight: 700;
+    }
+
+    /* AAMAAL SWITCHER TABS */
+    .aamaal-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .aamaal-tabs::-webkit-scrollbar { display: none; }
+    .aamaal-tab {
+      white-space: nowrap;
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #ffffff;
+      color: var(--text-muted);
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+    }
+    .aamaal-tab.active {
+      background: var(--teal-dark);
+      color: #ffffff;
+      border-color: var(--teal-dark);
+    }
+
+    /* DAILY SCREEN */
+    .aamaal-heading-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .arabic-banner {
+      font-family: 'Amiri', serif;
+      font-size: 29px;
+      line-height: 1.45;
+      text-align: center;
+      color: #111827;
+      margin: 2px 0 12px;
+      direction: rtl;
+    }
+    .daily-target-card {
+      background: radial-gradient(circle at 20% 20%, #11423d 0%, #062320 65%, #031412 100%);
+      color: #ffffff;
+      border-radius: 26px;
+      padding: 22px 18px;
+      text-align: center;
+      box-shadow: 0 14px 30px rgba(6, 35, 32, 0.2);
+      margin-bottom: 18px;
+    }
+    .selected-date-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.12);
+      color: #a7f3d0;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      letter-spacing: 0.4px;
+    }
+    .salam-arabic {
+      font-family: 'Amiri', serif;
+      font-size: 21px;
+      color: #ffffff;
+      margin-bottom: 10px;
+      direction: rtl;
+    }
+    .target-question {
+      font-size: 15px;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+    .mark-recited-btn {
+      background: linear-gradient(90deg, #e2f9b8 0%, #c8f5e0 100%);
+      color: #0b2e29;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-size: 15.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      min-width: 210px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+    }
+    .completed-badge {
+      display: inline-block;
+      background: rgba(190, 242, 100, 0.16);
+      border: 1px solid rgba(190, 242, 100, 0.5);
+      color: #d9f99d;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 14.5px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .completed-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .secondary-pill-btn {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .extra-count-box {
+      margin-top: 14px;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 12px;
+      border-radius: 16px;
+    }
+    .quick-add-chips {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .chip-btn {
+      background: rgba(190, 242, 100, 0.2);
+      border: 1px solid rgba(190, 242, 100, 0.45);
+      color: #ecfccb;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* SLIDABLE 30-DAY STRIP + FULL CALENDAR PICKER BAR */
+    .week-strip-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 2px;
+    }
+    .date-picker-mini-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .daily-date-picker {
+      border: 1.5px solid #cbd5e1;
+      background: #ffffff;
+      color: var(--teal-dark);
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .month-strip {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 2px 10px;
+      margin-bottom: 14px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .month-strip::-webkit-scrollbar { display: none; }
+    .day-cell {
+      flex: 0 0 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 4px;
+      border-radius: 16px;
+      border: 1.5px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .day-cell.is-today {
+      border-color: #94a3b8;
+      background: #f8fafc;
+    }
+    .day-cell.selected-day {
+      border-color: #0d9488;
+      background: #ecfdf5;
+      box-shadow: 0 4px 12px rgba(13, 148, 136, 0.18);
+      transform: translateY(-2px);
+    }
+    .day-month-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .day-cell.selected-day .day-month-tag { color: #0d9488; }
+    .day-name {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 1px;
+    }
+    .day-cell.selected-day .day-name { color: #0f766e; }
+    .day-num {
+      font-size: 15px;
+      color: var(--text-main);
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-bottom: 4px;
+    }
+    .dot-done {
+      background-color: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+    }
+    .dot-missed { background-color: #ef4444; }
+    .day-mini-count {
+      font-size: 10px;
+      font-weight: 700;
+      color: #475569;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .day-cell.selected-day .day-mini-count { color: #065f46; }
+
+    /* TWO PERSONAL STAT CARDS */
+    .personal-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .mint-stat-card {
+      background: linear-gradient(145deg, #d8ede8 0%, #e3f3ef 100%);
+      border: 1.5px solid var(--mint-border);
+      border-radius: 22px;
+      padding: 15px 14px;
+    }
+    .mint-stat-label { font-size: 12px; color: #475569; font-weight: 600; margin-bottom: 8px; }
+    .mint-stat-value { font-size: 26px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+    .mint-stat-sub { font-size: 11.5px; color: #64748b; font-weight: 500; }
+
+    /* PROMINENT USER MONTHLY REPORT BUTTON + BOTTOM SUMMARY BUTTON */
+    .my-monthly-report-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #072c28 0%, #0d524a 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(7, 44, 40, 0.16);
+      margin-bottom: 10px;
+    }
+    .my-monthly-report-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ecfccb;
+      text-align: center;
+      flex: 1;
+    }
+    .worldwide-pill-btn {
+      width: 100%;
+      background: #ffffff;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 999px;
+      padding: 13px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      margin-bottom: 10px;
+    }
+    .worldwide-pill-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      line-height: 1.35;
+      text-align: center;
+      flex: 1;
+    }
+    .double-arrow { font-size: 16px; color: #64748b; font-weight: 700; padding: 0 4px; }
+
+    /* INSTALL PWA BANNER BUTTON */
+    .install-pwa-btn {
+      width: 100%;
+      background: #f0fdf4;
+      border: 1.5px dashed #14b8a6;
+      color: #0f766e;
+      border-radius: 16px;
+      padding: 11px 16px;
+      font-size: 12.5px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* GROUP STATISTICS SCREEN */
+    .stats-top-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .back-btn {
+      width: 40px; height: 40px; border-radius: 12px; background: #ffffff; border: 1px solid #e2e8f0;
+      font-size: 20px; color: #0f172a; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .stats-header-title { flex: 1; text-align: center; font-size: 15px; font-weight: 700; color: #1e293b; line-height: 1.3; padding-right: 40px; }
+
+    .lifetime-hero-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(125deg, #05221f 0%, #0a423c 55%, #115e56 100%);
+      color: #ffffff;
+      border-radius: 26px;
+      padding: 24px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 28px rgba(6, 44, 40, 0.18);
+    }
+    .lifetime-dome-svg {
+      position: absolute; right: -10px; bottom: -15px; width: 180px; height: 180px; opacity: 0.25; pointer-events: none;
+    }
+    .lifetime-pill {
+      display: inline-block;
+      background: rgba(190, 242, 100, 0.18);
+      color: #bef264;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .lifetime-number { font-size: 38px; font-weight: 800; color: #ffffff; margin-bottom: 6px; letter-spacing: -1px; position: relative; z-index: 2; }
+    .lifetime-sub { font-size: 12.5px; color: #cbd5e1; position: relative; z-index: 2; }
+
+    .summary-3col-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+    .mini-summary-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f6;
+    }
+    .mini-summary-val { font-size: 19px; font-weight: 800; color: #0f766e; margin-bottom: 4px; }
+    .mini-summary-lbl { font-size: 11px; color: #64748b; font-weight: 600; line-height: 1.25; }
+
+    .section-heading {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .white-list-card {
+      background: #ffffff; border-radius: 22px; padding: 6px 16px; box-shadow: 0 4px 18px rgba(0,0,0,0.04); margin-bottom: 22px;
+    }
+    .leader-row { padding: 13px 0; border-bottom: 1px solid #f1f5f9; }
+    .leader-row:last-child { border-bottom: none; }
+    .leader-top-line { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .leader-left { display: flex; align-items: center; gap: 10px; }
+    .rank-circle {
+      width: 26px; height: 26px; border-radius: 50%; background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rank-1 { background: #fef3c7; color: #b45309; }
+    .rank-2 { background: #e2e8f0; color: #334155; }
+    .rank-3 { background: #ffedd5; color: #9a3412; }
+    .flag-badge {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .leader-name { font-size: 14px; font-weight: 700; color: #1e293b; }
+    .leader-score { font-size: 14.5px; font-weight: 800; color: #0f766e; }
+    .leader-bar-track { width: 100%; height: 5px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+    .leader-bar-fill { height: 100%; background: linear-gradient(90deg, #14b8a6 0%, #84cc16 100%); border-radius: 999px; }
+
+    .daily-perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+    .perf-box {
+      background: #ffffff; border-radius: 20px; padding: 16px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); border-left: 4px solid #0d9488;
+    }
+    .perf-box.mine { border-left-color: #84cc16; }
+    .perf-num { font-size: 22px; font-weight: 800; color: #1e293b; margin-bottom: 4px; }
+    .perf-label { font-size: 12px; color: #64748b; font-weight: 600; }
+
+    /* WEEKLY & MONTHLY PERFORMANCE CARDS (WITH TOP BY COUNTRY) */
+    .perf-summary-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+      margin-bottom: 24px;
+    }
+    .perf-top-metric-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .perf-top-metric-val {
+      min-width: 90px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    .perf-top-metric-lbl {
+      font-size: 14px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .perf-divider {
+      height: 1px;
+      background: #f1f5f9;
+      margin: 14px 0;
+    }
+    .top-country-heading {
+      font-size: 14px;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+    .country-stat-row {
+      display: grid;
+      grid-template-columns: 105px 1fr 75px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .country-stat-row:last-child { margin-bottom: 0; }
+    .country-stat-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #334155;
+      line-height: 1.25;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .country-bar-track {
+      width: 100%;
+      height: 9px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .country-bar-fill {
+      height: 100%;
+      background: #76a878;
+      border-radius: 999px;
+      min-width: 6px;
+    }
+    .country-stat-val {
+      text-align: right;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .weekly-chart-card { background: #ffffff; border-radius: 22px; padding: 18px 14px 14px; box-shadow: 0 4px 18px rgba(0,0,0,0.04); margin-bottom: 22px; }
+    .bars-wrap { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; height: 115px; align-items: flex-end; padding-top: 18px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
+    .bar-val { font-size: 9.5px; color: #64748b; font-weight: 700; margin-bottom: 4px; }
+    .bar-fill { width: 100%; max-width: 24px; background: linear-gradient(180deg, #14b8a6 0%, #0d9488 100%); border-radius: 6px 6px 3px 3px; min-height: 6px; }
+    .bar-day { font-size: 10.5px; color: #64748b; margin-top: 6px; font-weight: 600; }
+
+    /* ADMIN PANEL & USER MONTHLY SCREEN */
+    .admin-card {
+      background: #ffffff;
+      border-radius: 22px;
+      padding: 18px 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      margin-bottom: 20px;
+      border: 1px solid #eef2f6;
+    }
+    .admin-filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .select-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal-dark);
+      background: #f8fafc;
+    }
+    .admin-sub-row {
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .admin-sub-row:last-child { border-bottom: none; }
+    .admin-row-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pill-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #0f766e;
+    }
+    .pill-tag.paused { background: #fef2f2; color: #b91c1c; }
+    .pill-tag.ahead { background: #dcfce7; color: #166534; }
+    .pill-tag.behind { background: #fffbeb; color: #b45309; }
+
+    /* SINGLE MONTHLY BREAKDOWN CARD */
+    .monthly-aamaal-box {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 14px;
+      background: #f8fafc;
+    }
+    .monthly-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .monthly-metric-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px 6px;
+      text-align: center;
+    }
+    .monthly-metric-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .monthly-metric-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .mini-month-cal-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .mini-cal-day {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .mini-cal-day.done {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #86efac;
+    }
+    .mini-cal-day.missed {
+      background: #fee2e2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+    .mini-cal-day.future {
+      background: #f1f5f9;
+      color: #94a3b8;
+      cursor: default;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+    .report-table th {
+      text-align: left;
+      color: #64748b;
+      font-weight: 700;
+      padding: 8px 4px;
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+    .report-table td {
+      padding: 10px 4px;
+      border-bottom: 1px solid #f1f5f9;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    .admin-btn-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .mini-btn {
+      padding: 6px 11px;
+      border-radius: 9px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+    }
+    .mini-btn.danger {
+      border-color: #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+    .mini-btn.warning {
+      border-color: #fde68a;
+      background: #fffbeb;
+      color: #b45309;
+    }
+    .mini-btn.teal {
+      border-color: #99f6e4;
+      background: #f0fdfa;
+      color: #0f766e;
+    }
+    .form-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .form-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: -4px;
+    }
+
+    /* SETTINGS & iOS INSTALL MODALS */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(4, 31, 28, 0.72); backdrop-filter: blur(4px);
+      display: flex; align-items: flex-end; justify-content: center; z-index: 100; padding: 16px;
+    }
+    .modal-sheet {
+      background: #ffffff; width: 100%; max-width: 440px; border-radius: 28px; padding: 24px 20px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+    .modal-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .modal-title { font-size: 20px; font-weight: 800; color: var(--teal-dark); }
+    .close-modal-btn {
+      background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%;
+      font-size: 16px; font-weight: 700; color: #475569; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.45; }
+    .privacy-option { border: 2px solid #e2e8f0; border-radius: 16px; padding: 14px; margin-bottom: 10px; cursor: pointer; }
+    .privacy-option.selected { border-color: #0d9488; background: #f0fdf4; }
+    .privacy-option-title { font-weight: 700; font-size: 15px; color: var(--teal-dark); margin-bottom: 3px; display: flex; justify-content: space-between; }
+    .privacy-option-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .input-row { display: flex; gap: 8px; margin-top: 8px; }
+    .text-input { flex: 1; padding: 11px 14px; border-radius: 12px; border: 1.5px solid #cbd5e1; font-family: inherit; font-size: 14px; min-width: 0; width: 100%; }
+    .small-btn { background: var(--teal-dark); color: #ffffff; border: none; padding: 0 16px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
+    .divider { height: 1px; background: #e2e8f0; margin: 16px 0; }
+    .action-btn {
+      background: linear-gradient(90deg, #d9f99d 0%, #bbf7d0 100%); color: #062c28; border: none; padding: 14px 24px; border-radius: 999px; font-weight: 700; font-size: 15px; font-family: inherit; cursor: pointer; width: 100%;
+    }
+    .signout-btn {
+      width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c; font-weight: 700; font-size: 13px; margin-top: 12px; cursor: pointer;
+    }
+    .ios-step-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. SPLASH & LOGIN SCREEN (GOOGLE + SEPARATE MOBILE SIGN IN & REGISTER) -->
+  <div id="splash-screen">
+    <div class="welcome-label">Welcome To</div>
+    <div class="logo-wrap">
+      <svg viewBox="0 0 220 200" width="140" height="140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="circleGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#14b8a6"/>
+            <stop offset="100%" stop-color="#84cc16"/>
+          </linearGradient>
+          <linearGradient id="mosqueGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="100%" stop-color="#d9f99d"/>
+          </linearGradient>
+        </defs>
+        <circle cx="135" cy="40" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="152" cy="44" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="166" cy="54" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="174" cy="70" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="172" cy="88" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="163" cy="104" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="155" cy="120" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="150" cy="138" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="138" cy="152" r="6" stroke="#bef264" stroke-width="3"/>
+        <circle cx="121" cy="158" r="6" stroke="#bef264" stroke-width="3"/>
+        <path d="M180 70 C192 75, 195 90, 195 105" stroke="#bef264" stroke-width="3" stroke-linecap="round"/>
+        <rect x="189" y="105" width="12" height="16" rx="3" stroke="#bef264" stroke-width="3"/>
+        <circle cx="90" cy="100" r="68" fill="url(#circleGrad)" stroke="#ecfccb" stroke-width="2" stroke-dasharray="4 4"/>
+        <rect x="52" y="75" width="12" height="75" rx="2" fill="url(#mosqueGrad)"/>
+        <polygon points="58,60 50,75 66,75" fill="url(#mosqueGrad)"/>
+        <rect x="116" y="75" width="12" height="75" rx="2" fill="url(#mosqueGrad)"/>
+        <polygon points="122,60 114,75 130,75" fill="url(#mosqueGrad)"/>
+        <path d="M68 115 C68 88, 112 88, 112 115 Z" fill="url(#mosqueGrad)"/>
+        <circle cx="90" cy="84" r="4" fill="#ecfccb"/>
+        <rect x="68" y="115" width="44" height="35" fill="url(#mosqueGrad)"/>
+        <path d="M82 150 L82 132 C82 124, 98 124, 98 132 L98 150 Z" fill="#062c28"/>
+      </svg>
+    </div>
+    <h1 class="brand-title">ISLAAH FOUNDATION'S</h1>
+    <div class="brand-subtitle">Aamaal Circle</div>
+
+    <!-- LOGIN OPTIONS CONTAINER -->
+    <div id="auth-options-box" class="auth-box hidden">
+      <button id="login-btn" class="google-btn">
+        <svg width="20" height="20" viewBox="0 0 48 48">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <div class="or-divider">OR</div>
+
+      <button id="toggle-phone-auth-btn" class="phone-toggle-btn">
+        📱 Use Mobile Number & PIN
+      </button>
+
+      <!-- MOBILE NUMBER + PIN PANEL (SEPARATE SIGN IN vs REGISTER TABS) -->
+      <div id="phone-auth-panel" class="phone-auth-panel hidden">
+        <div class="phone-mode-tabs">
+          <button class="phone-mode-tab active" id="tab-mobile-signin">🔑 Sign In (Existing)</button>
+          <button class="phone-mode-tab" id="tab-mobile-register">✨ Register (New)</button>
+        </div>
+
+        <!-- Full Name Box: ONLY shown when "Register (New)" tab is selected -->
+        <div id="register-name-wrap" class="hidden">
+          <input type="text" id="phone-user-name" class="auth-input" placeholder="Enter Your Full Name">
+        </div>
+
+        <div class="phone-row">
+          <select id="phone-country-code" class="country-code-select">
+            <option value="+91">🇮🇳 +91</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+971">🇦🇪 +971</option>
+            <option value="+966">🇸🇦 +966</option>
+            <option value="+968">🇴🇲 +968</option>
+            <option value="+974">🇶🇦 +974</option>
+            <option value="+965">🇰🇼 +965</option>
+            <option value="+61">🇦🇺 +61</option>
+          </select>
+          <input type="tel" id="phone-number-input" class="auth-input" style="margin-bottom:0;" placeholder="Mobile Number" maxlength="15">
+        </div>
+
+        <input type="password" id="phone-pin-input" class="auth-input" placeholder="Enter 4-Digit PIN" inputmode="numeric" maxlength="8">
+
+        <!-- Separate Buttons for Sign In vs Register -->
+        <button class="phone-submit-btn" id="phone-signin-btn">Sign In with Mobile & PIN →</button>
+        <button class="phone-submit-btn register-mode hidden" id="phone-register-btn">Create New Account →</button>
+      </div>
+    </div>
+
+    <div id="splash-status" class="splash-loader">Connecting to Aamaal Circle...</div>
+  </div>
+
+  <!-- 2. MAIN APP CONTAINER -->
+  <div id="app-container" class="hidden">
+    
+    <!-- VIEW A: DAILY AAMAAL SCREEN -->
+    <div id="daily-view">
+      <div class="top-bar">
+        <button class="icon-btn" id="open-settings-btn" title="Settings & Rename">⚙️</button>
+
+        <div class="member-dropdown-wrapper">
+          <button class="member-dropdown-btn" id="quick-member-btn">
+            <span><span id="active-member-flag">🇮🇳</span> <span id="active-member-name">Loading...</span></span>
+            <span style="font-size:11px;">▼</span>
+          </button>
+          <div id="quick-member-menu" class="quick-dropdown-menu hidden"></div>
+        </div>
+
+        <button id="admin-badge" class="icon-btn hidden" title="Open Admin Panel">👑</button>
+        <div id="admin-spacer" style="width:42px;"></div>
+      </div>
+
+      <!-- AAMAAL TABS -->
+      <div class="aamaal-tabs" id="aamaal-tabs-container"></div>
+
+      <div class="aamaal-heading-title" id="current-aamaal-title">Durood Shareef</div>
+      <div class="arabic-banner" id="current-aamaal-arabic">اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ</div>
+
+      <div class="daily-target-card">
+        <div class="selected-date-pill" id="active-date-banner">📅 Logging for: Today</div>
+        <div class="salam-arabic">السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ</div>
+        <div class="target-question" id="target-question-text">
+          Have you recited your daily target of 313 times Durood Shareef?
+        </div>
+
+        <div id="not-recited-box">
+          <button class="mark-recited-btn" id="mark-recited-btn">Mark as Recited</button>
+        </div>
+
+        <div id="recited-box" class="hidden">
+          <div class="completed-badge">
+            ✓ Completed (<span id="selected-date-label">Today</span>): <span id="today-logged-num">313</span>
+          </div>
+          <div class="completed-actions">
+            <button class="secondary-pill-btn" id="toggle-extra-btn">+ Add / Edit Count</button>
+            <button class="secondary-pill-btn" id="undo-today-btn" style="color:#fca5a5;border-color:rgba(252,165,165,0.4);">Undo</button>
+          </div>
+
+          <div id="extra-count-panel" class="extra-count-box hidden">
+            <div style="font-size:12px;color:#cbd5e1;margin-bottom:8px;">Tap to add more, or type exact total for this day:</div>
+            <div class="quick-add-chips">
+              <button class="chip-btn" data-add="100">+100</button>
+              <button class="chip-btn" data-add="313">+313</button>
+              <button class="chip-btn" data-add="500">+500</button>
+            </div>
+            <div class="input-row">
+              <input type="number" id="custom-count-input" class="text-input" placeholder="Enter total (e.g. 500)" style="background:#ffffff;color:#0f172a;">
+              <button class="small-btn" id="save-custom-count-btn" style="background:#bef264;color:#062c28;">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 30-DAY SLIDING STRIP + ANY-DATE CALENDAR PICKER (LOCAL TIMEZONE) -->
+      <div class="week-strip-header">
+        <span>◀ Slide 30d or pick any date:</span>
+        <div class="date-picker-mini-wrap">
+          <input type="date" id="daily-any-date-picker" class="daily-date-picker" title="Pick any date">
+          <span id="reset-to-today-link" style="color:#0d9488;cursor:pointer;">Today ▶</span>
+        </div>
+      </div>
+      <div class="month-strip" id="week-strip-container"></div>
+
+      <div class="personal-stats-grid">
+        <div class="mint-stat-card">
+          <div class="mint-stat-label">Recited by you this week</div>
+          <div class="mint-stat-value" id="my-week-total">0</div>
+          <div class="mint-stat-sub" id="stat-card-aamaal-1">Durood Shareef</div>
+        </div>
+        <div class="mint-stat-card">
+          <div class="mint-stat-label">Recited by you today</div>
+          <div class="mint-stat-value" id="my-today-total">0</div>
+          <div class="mint-stat-sub" id="stat-card-aamaal-2">Durood Shareef</div>
+        </div>
+      </div>
+
+      <!-- PROMINENT VISIBLE BUTTON FOR USER MONTHLY REPORT & MISSED DAYS -->
+      <button class="my-monthly-report-btn" id="open-user-monthly-btn">
+        <span style="font-size:16px;">📊</span>
+        <span class="my-monthly-report-text">View My Monthly Report & Missed Days</span>
+        <span style="font-size:16px;color:#bef264;">→</span>
+      </button>
+
+      <!-- BOTTOM GROUP SUMMARY BUTTON -->
+      <button class="worldwide-pill-btn" id="open-stats-btn">
+        <span class="double-arrow">«</span>
+        <span class="worldwide-pill-text" id="bottom-summary-text">
+          View the total number of Durood Shareef recited
+        </span>
+        <span class="double-arrow">»</span>
+      </button>
+
+      <!-- INSTALL APP BUTTON -->
+      <button id="install-pwa-btn" class="install-pwa-btn">
+        📲 Install App to Phone Home Screen (Android / iPhone)
+      </button>
+    </div>
+
+    <!-- VIEW B: DEDICATED USER MONTHLY REPORT SCREEN -->
+    <div id="user-monthly-view" class="hidden">
+      <div class="stats-top-header">
+        <button class="back-btn" id="back-from-user-monthly-btn">←</button>
+        <div class="stats-header-title">📊 My Monthly Report & Missed Days</div>
+      </div>
+
+      <div class="admin-card">
+        <div class="admin-filter-grid">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Aamaal:</label>
+            <select id="user-monthly-aamaal-select" class="select-input"></select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Month:</label>
+            <input type="month" id="user-monthly-month-picker" class="select-input">
+          </div>
+        </div>
+
+        <div id="user-monthly-breakdown-container"></div>
+      </div>
+    </div>
+
+    <!-- VIEW C: GROUP STATISTICS SCREEN (WITH WEEKLY & MONTHLY TOP BY COUNTRY SUMMARIES) -->
+    <div id="stats-view" class="hidden">
+      <div class="stats-top-header">
+        <button class="back-btn" id="back-to-daily-btn">←</button>
+        <div class="stats-header-title" id="stats-top-title-text">
+          View the total number of Durood Shareef recited
+        </div>
+      </div>
+
+      <div class="lifetime-hero-card">
+        <div class="lifetime-pill">🌍 Islaah Foundation Circle</div>
+        <div style="font-size:13px;color:#e2e8f0;margin-bottom:4px;">Cumulative <span id="lifetime-aamaal-name">Durood Shareef</span></div>
+        <div class="lifetime-number" id="group-lifetime-total">0</div>
+        <div class="lifetime-sub">Combined recitations by all circle & family members</div>
+        <svg class="lifetime-dome-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 20 L100 45" stroke="#a7f3d0" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="100" cy="16" r="5" stroke="#a7f3d0" stroke-width="3"/>
+          <path d="M40 135 C40 65, 160 65, 160 135 Z" fill="#a7f3d0"/>
+          <rect x="30" y="135" width="140" height="65" fill="#a7f3d0"/>
+        </svg>
+      </div>
+
+      <div class="summary-3col-grid">
+        <div class="mini-summary-card">
+          <div class="mini-summary-val" id="stats-week-group-total">0</div>
+          <div class="mini-summary-lbl">This Week's Circle Total</div>
+        </div>
+        <div class="mini-summary-card">
+          <div class="mini-summary-val" id="stats-total-members">0</div>
+          <div class="mini-summary-lbl">Active Circle Members</div>
+        </div>
+        <div class="mini-summary-card">
+          <div class="mini-summary-val" id="stats-new-members">+0</div>
+          <div class="mini-summary-lbl">Joined Last 10 Days</div>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <span>🏆 Top <span id="leader-aamaal-name">Durood Shareef</span> Reciters (This Week)</span>
+      </div>
+      <div class="white-list-card" id="leaderboard-container"></div>
+
+      <div class="section-heading"><span>⚡ Today's Activity</span></div>
+      <div class="daily-perf-grid">
+        <div class="perf-box">
+          <div class="perf-num" id="group-today-total">0</div>
+          <div class="perf-label">Circle Total Today</div>
+        </div>
+        <div class="perf-box mine">
+          <div class="perf-num" id="my-contrib-today">0</div>
+          <div class="perf-label">Your Count Today</div>
+        </div>
+      </div>
+
+      <!-- SUMMARY 1: WEEKLY PERFORMANCE + TOP BY COUNTRY -->
+      <div class="section-heading"><span>Weekly Performance</span></div>
+      <div class="perf-summary-card">
+        <div class="perf-top-metric-row">
+          <div class="perf-top-metric-val" id="weekly-perf-group-total">0</div>
+          <div class="perf-top-metric-lbl">Total Recited This Week</div>
+        </div>
+        <div class="perf-top-metric-row" style="margin-bottom:0;">
+          <div class="perf-top-metric-val" id="weekly-perf-my-total">0</div>
+          <div class="perf-top-metric-lbl">Your contribution this week</div>
+        </div>
+        <div class="perf-divider"></div>
+        <div class="top-country-heading">Top by Country</div>
+        <div id="weekly-top-countries-list"></div>
+      </div>
+
+      <!-- SUMMARY 2: MONTHLY PERFORMANCE + TOP BY COUNTRY -->
+      <div class="section-heading"><span>Monthly Performance</span></div>
+      <div class="perf-summary-card">
+        <div class="perf-top-metric-row">
+          <div class="perf-top-metric-val" id="monthly-perf-group-total">0</div>
+          <div class="perf-top-metric-lbl">Total Recited This Month</div>
+        </div>
+        <div class="perf-top-metric-row" style="margin-bottom:0;">
+          <div class="perf-top-metric-val" id="monthly-perf-my-total">0</div>
+          <div class="perf-top-metric-lbl">Your contribution this month</div>
+        </div>
+        <div class="perf-divider"></div>
+        <div class="top-country-heading">Top by Country</div>
+        <div id="monthly-top-countries-list"></div>
+      </div>
+
+      <div class="section-heading"><span>📊 Last 7 Days Trend</span></div>
+      <div class="weekly-chart-card">
+        <div class="bars-wrap" id="weekly-bars-container"></div>
+      </div>
+    </div>
+
+    <!-- VIEW D: ADMIN PANEL SCREEN -->
+    <div id="admin-view" class="hidden">
+      <div class="stats-top-header">
+        <button class="back-btn" id="back-from-admin-btn">←</button>
+        <div class="stats-header-title">👑 Circle Admin Panel</div>
+      </div>
+
+      <!-- Export to Excel & Fresh Database Controls -->
+      <div class="admin-card" style="background:#f0fdf4;border-color:#bbf7d0;padding:16px;">
+        <div style="font-size:13px;font-weight:800;color:#166534;margin-bottom:10px;text-align:center;">
+          📊 Reports & Database Tools
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+          <button class="mini-btn teal" id="export-excel-btn" style="padding:10px 14px;font-size:12.5px;flex:1;">
+            📥 Export All to Excel (CSV)
+          </button>
+          <button class="mini-btn danger" id="wipe-database-btn" style="padding:10px 14px;font-size:12.5px;">
+            🧹 Clear All Logs
+          </button>
+        </div>
+      </div>
+
+      <!-- 1. Person-Wise Daily Count Inspector -->
+      <div class="section-heading">
+        <span>📋 Person-Wise Daily Count & Edit</span>
+      </div>
+      <div class="admin-card" id="admin-daily-inspector-card">
+        <div class="admin-filter-grid">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Pick Any Date:</label>
+            <input type="date" id="admin-date-picker" class="select-input">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Aamaal:</label>
+            <select id="admin-aamaal-select" class="select-input"></select>
+          </div>
+        </div>
+
+        <button class="action-btn" id="copy-whatsapp-btn" style="padding:11px 16px;font-size:13px;margin-bottom:14px;">
+          📲 Copy Selected Date Report for WhatsApp
+        </button>
+
+        <div id="admin-person-wise-list"></div>
+      </div>
+
+      <!-- 2. INDIVIDUAL MEMBER MONTHLY COUNT VS TARGET -->
+      <div class="section-heading">
+        <span>🎯 Member Monthly Count vs. Target</span>
+      </div>
+      <div class="admin-card">
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Member:</label>
+          <select id="admin-monthly-member-select" class="select-input"></select>
+        </div>
+        <div class="admin-filter-grid">
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Aamaal:</label>
+            <select id="admin-monthly-aamaal-select" class="select-input"></select>
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;color:#64748b;display:block;margin-bottom:4px;">Select Month:</label>
+            <input type="month" id="admin-monthly-month-picker" class="select-input">
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+          <button class="action-btn" id="copy-monthly-whatsapp-btn" style="padding:10px 14px;font-size:12.5px;flex:1;">
+            📲 Copy Monthly Report (WhatsApp)
+          </button>
+          <button class="mini-btn teal" id="export-member-month-csv-btn" style="padding:10px 14px;font-size:12px;">
+            📥 Export Month CSV
+          </button>
+        </div>
+
+        <div id="admin-member-monthly-breakdown"></div>
+      </div>
+
+      <!-- 3. Weekly & Monthly Summary Table -->
+      <div class="section-heading"><span>📈 Circle Weekly & Monthly Totals</span></div>
+      <div class="admin-card">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Aamaal</th>
+              <th>7-Day Total</th>
+              <th>30-Day Total</th>
+            </tr>
+          </thead>
+          <tbody id="admin-report-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- 4. Manage Daily Aamaal -->
+      <div class="section-heading"><span>📿 Manage Daily Aamaal</span></div>
+      <div class="admin-card">
+        <div id="admin-aamaal-list"></div>
+        <div class="divider"></div>
+        <div style="font-size:14px;font-weight:800;color:var(--teal-dark);margin-bottom:4px;" id="aamaal-form-title">
+          + Add New Aamaal
+        </div>
+        <input type="hidden" id="edit-aamaal-id" value="">
+        <div class="form-stack">
+          <label class="form-label">Aamaal Name (English)</label>
+          <input type="text" id="aamaal-name-input" class="text-input" placeholder="e.g., 100 Astaghfirullah">
+
+          <label class="form-label">Arabic Text</label>
+          <input type="text" id="aamaal-arabic-input" class="text-input" placeholder="e.g., أَسْتَغْفِرُ اللَّهَ" dir="rtl">
+
+          <label class="form-label">Daily Target Count</label>
+          <input type="number" id="aamaal-target-input" class="text-input" placeholder="e.g., 100">
+
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <button class="action-btn" id="save-aamaal-btn" style="padding:12px;">Save Aamaal</button>
+            <button class="mini-btn hidden" id="cancel-edit-aamaal-btn" style="padding:0 16px;">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Circle & Family Members -->
+      <div class="section-heading"><span>👥 Circle & Family Members</span></div>
+      <div class="admin-card" id="admin-members-list"></div>
+    </div>
+
+  </div>
+
+  <!-- 3. SETTINGS MODAL (WITH RENAME + COUNTRY SELECTOR) -->
+  <div id="settings-modal" class="modal-backdrop hidden">
+    <div class="modal-sheet">
+      <div class="modal-header-row">
+        <div class="modal-title" id="modal-heading">Settings & Profile</div>
+        <button class="close-modal-btn" id="close-settings-btn" title="Close">✕</button>
+      </div>
+      <div class="modal-sub" id="modal-subheading">
+        Update your display name, country flag, family members, or leaderboard privacy.
+      </div>
+
+      <!-- Edit Display Name & Country Flag -->
+      <div>
+        <label style="font-size:12px;font-weight:700;color:#0f766e;">
+          ✏️ Edit Display Name & Country for Selected Profile:
+        </label>
+        <div class="input-row">
+          <input type="text" id="edit-current-profile-name" class="text-input" placeholder="Enter preferred display name">
+          <button class="small-btn" id="save-profile-name-btn" style="background:#0d9488;">Save</button>
+        </div>
+        <div style="margin-top:8px;">
+          <select id="edit-current-profile-country" class="select-input">
+            <option value="India">🇮🇳 India</option>
+            <option value="United States">🇺🇸 United States</option>
+            <option value="United Kingdom">🇬🇧 United Kingdom</option>
+            <option value="United Arab Emirates">🇦🇪 United Arab Emirates</option>
+            <option value="Saudi Arabia">🇸🇦 Saudi Arabia</option>
+            <option value="Oman">🇴🇲 Oman</option>
+            <option value="Qatar">🇶🇦 Qatar</option>
+            <option value="Kuwait">🇰🇼 Kuwait</option>
+            <option value="Canada">🇨🇦 Canada</option>
+            <option value="Australia">🇦🇺 Australia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="family-add-section">
+        <label style="font-size:12px;font-weight:700;color:#475569;">
+          👨‍👩‍👧‍👦 Add a New Family Member (e.g., type "Mom" or "Afzal's Mom"):
+        </label>
+        <div class="input-row">
+          <input type="text" id="new-family-name" class="text-input" placeholder="e.g., Mom, Wife, or Afzal's Mom">
+          <button class="small-btn" id="add-family-btn">+ Add</button>
+        </div>
+        <div class="divider"></div>
+      </div>
+
+      <label style="font-size:12px;font-weight:700;color:#475569;text-transform:uppercase;display:block;margin-bottom:10px;">
+        Leaderboard Privacy for <span id="privacy-target-name" style="color:#0d9488;">...</span>:
+      </label>
+
+      <div class="privacy-option" data-privacy="public">
+        <div class="privacy-option-title"><span>🌍 Public</span><span class="check-mark"></span></div>
+        <div class="privacy-option-desc">Name and recitation counts appear on the group leaderboard.</div>
+      </div>
+
+      <div class="privacy-option" data-privacy="private">
+        <div class="privacy-option-title"><span>🔒 Private</span><span class="check-mark"></span></div>
+        <div class="privacy-option-desc">Counted on the leaderboard, but name is hidden as "Hidden Member".</div>
+      </div>
+
+      <div class="privacy-option" data-privacy="anonymous">
+        <div class="privacy-option-title"><span>🕵️ Anonymous</span><span class="check-mark"></span></div>
+        <div class="privacy-option-desc">Hidden from leaderboard. Only added to the group's total recitations.</div>
+      </div>
+
+      <button class="action-btn" id="save-settings-btn" style="margin-top:10px;">Save All Settings</button>
+      <button class="signout-btn" id="signout-btn">Sign Out of Account</button>
+    </div>
+  </div>
+
+  <!-- 4. APPLE iOS / ANDROID PWA INSTALL GUIDE MODAL -->
+  <div id="pwa-install-modal" class="modal-backdrop hidden">
+    <div class="modal-sheet">
+      <div class="modal-header-row">
+        <div class="modal-title">📲 Install Aamaal Circle</div>
+        <button class="close-modal-btn" id="close-pwa-modal-btn" title="Close">✕</button>
+      </div>
+      <div class="modal-sub">
+        Install this app onto your phone's Home Screen so it opens full-screen with one tap:
+      </div>
+
+      <div class="ios-step-box">
+        🍎 <strong>On Apple iPhone / iPad (Safari):</strong><br>
+        1. Tap the <strong>Share icon (⬆️ square with arrow)</strong> at the bottom of Safari.<br>
+        2. Scroll down and tap <strong>"Add to Home Screen" (➕)</strong>.<br>
+        3. Tap <strong>"Add"</strong> in the top-right corner.
+      </div>
+
+      <div class="ios-step-box">
+        🤖 <strong>On Android (Chrome):</strong><br>
+        1. Tap the <strong>three dots (⋮)</strong> in the top-right corner of Chrome.<br>
+        2. Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong>.
+      </div>
+
+      <button class="action-btn" id="got-it-pwa-btn" style="margin-top:8px;">Got It!</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE & APPLICATION SCRIPT -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { 
+      getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,
+      createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { 
+      getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, query, getDocs 
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAfXgyw7gzR1DREKsFI3PMeh69IbwzFSnQ",
+      authDomain: "islaah-aamaal-circle-5b74e.firebaseapp.com",
+      projectId: "islaah-aamaal-circle-5b74e",
+      storageBucket: "islaah-aamaal-circle-5b74e.firebasestorage.app",
+      messagingSenderId: "1092263722397",
+      appId: "1:1092263722397:web:b2a9718d04e085eb03c374",
+      measurementId: "G-F6CKQXDEK4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    // --- 1. AUTO-DETECT COUNTRY & FLAG VIA DEVICE TIMEZONE ---
+    const COUNTRY_FLAGS = {
+      "India": "🇮🇳",
+      "United States": "🇺🇸",
+      "United Kingdom": "🇬🇧",
+      "United Arab Emirates": "🇦🇪",
+      "Saudi Arabia": "🇸🇦",
+      "Oman": "🇴🇲",
+      "Qatar": "🇶🇦",
+      "Kuwait": "🇰🇼",
+      "Canada": "🇨🇦",
+      "Australia": "🇦🇺"
+    };
+
+    function detectLocationFromTimezone() {
+      const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "").toLowerCase();
+      if (tz.includes("kolkata") || tz.includes("calcutta") || tz.includes("india")) {
+        return { country: "India", flag: "🇮🇳", dial: "+91" };
+      }
+      if (tz.includes("toronto") || tz.includes("vancouver") || tz.includes("montreal") || tz.includes("edmonton") || tz.includes("winnipeg") || tz.includes("halifax")) {
+        return { country: "Canada", flag: "🇨🇦", dial: "+1" };
+      }
+      if (tz.startsWith("america/") || tz.startsWith("us/")) {
+        return { country: "United States", flag: "🇺🇸", dial: "+1" };
+      }
+      if (tz.includes("london") || tz.includes("europe/london") || tz.includes("belfast")) {
+        return { country: "United Kingdom", flag: "🇬🇧", dial: "+44" };
+      }
+      if (tz.includes("dubai") || tz.includes("muscat")) {
+        return tz.includes("muscat")
+          ? { country: "Oman", flag: "🇴🇲", dial: "+968" }
+          : { country: "United Arab Emirates", flag: "🇦🇪", dial: "+971" };
+      }
+      if (tz.includes("riyadh")) {
+        return { country: "Saudi Arabia", flag: "🇸🇦", dial: "+966" };
+      }
+      if (tz.includes("qatar")) {
+        return { country: "Qatar", flag: "🇶🇦", dial: "+974" };
+      }
+      if (tz.includes("kuwait")) {
+        return { country: "Kuwait", flag: "🇰🇼", dial: "+965" };
+      }
+      if (tz.startsWith("australia/")) {
+        return { country: "Australia", flag: "🇦🇺", dial: "+61" };
+      }
+      return { country: "India", flag: "🇮🇳", dial: "+91" };
+    }
+
+    const detectedLoc = detectLocationFromTimezone();
+    const phoneDialSelect = document.getElementById("phone-country-code");
+    if (phoneDialSelect && detectedLoc.dial) {
+      phoneDialSelect.value = detectedLoc.dial;
+    }
+
+    function getMemberCountry(member, memberMap) {
+      if (!member) return "India";
+      if (member.country) return member.country;
+      if (!member.isPrimary && memberMap && memberMap[member.parentUid]?.country) {
+        return memberMap[member.parentUid].country;
+      }
+      return "India";
+    }
+
+    function getMemberFlag(member, memberMap) {
+      const c = getMemberCountry(member, memberMap);
+      return COUNTRY_FLAGS[c] || member?.flag || "🇮🇳";
+    }
+
+    // --- 2. OPTION A: LOCAL DEVICE TIMEZONE DATE HELPERS ---
+    function getLocalDateString(dateObj = new Date()) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const d = String(dateObj.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    let currentUser = null;
+    let pendingPhoneSignupName = "";
+    let pendingPhoneNumber = "";
+    let deferredInstallPrompt = null;
+
+    let myProfiles = [];
+    let allMembers = [];
+    let activeProfile = null;
+    let allAamaalRaw = [];
+    let aamaalList = [];
+    let activeAamaal = null;
+    let allLogsForAamaal = [];
+    let selectedPrivacy = "public";
+    let isFirstLogin = false;
+    let selectedDateLocal = getLocalDateString();
+
+    let adminFilterDate = getLocalDateString();
+    let adminFilterAamaalId = "";
+    let adminMonthlyMemberId = "";
+    let adminMonthlyAamaalId = "";
+    let adminMonthlyMonth = getLocalDateString().slice(0, 7);
+
+    let userMonthlyAamaalId = "";
+    let userMonthlyReportMonth = getLocalDateString().slice(0, 7);
+
+    // --- PWA INSTALLATION HANDLER ---
+    const installPwaBtn = document.getElementById("install-pwa-btn");
+    const pwaInstallModal = document.getElementById("pwa-install-modal");
+
+    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+      installPwaBtn.classList.add("hidden");
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      installPwaBtn.classList.remove("hidden");
+    });
+
+    installPwaBtn.addEventListener("click", async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+      } else {
+        pwaInstallModal.classList.remove("hidden");
+      }
+    });
+
+    document.getElementById("close-pwa-modal-btn").addEventListener("click", () => pwaInstallModal.classList.add("hidden"));
+    document.getElementById("got-it-pwa-btn").addEventListener("click", () => pwaInstallModal.classList.add("hidden"));
+
+    function formatAnyDatePretty(dateKey) {
+      if (!dateKey) return "";
+      const [y, m, d] = dateKey.split("-").map(Number);
+      const dt = new Date(y, m - 1, d, 12, 0, 0);
+      return new Intl.DateTimeFormat('en-US', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      }).format(dt);
+    }
+
+    function formatMonthYearPretty(monthStr) {
+      if (!monthStr) return "";
+      const [y, m] = monthStr.split("-").map(Number);
+      const dt = new Date(y, m - 1, 15, 12, 0, 0);
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+        year: 'numeric'
+      }).format(dt);
+    }
+
+    function getMonthDetails(monthStr) {
+      const [year, month] = monthStr.split("-").map(Number);
+      const totalDaysInMonth = new Date(year, month, 0).getDate();
+      const todayLocal = getLocalDateString();
+      const currentMonthLocal = todayLocal.slice(0, 7);
+      const todayDayNum = Number(todayLocal.slice(8, 10));
+
+      let elapsedDays = totalDaysInMonth;
+      if (monthStr === currentMonthLocal) {
+        elapsedDays = todayDayNum;
+      } else if (monthStr > currentMonthLocal) {
+        elapsedDays = 0;
+      }
+
+      return {
+        year,
+        month,
+        totalDaysInMonth,
+        elapsedDays,
+        isCurrentMonth: monthStr === currentMonthLocal
+      };
+    }
+
+    function getLastNDaysKeys(n) {
+      const keys = new Set();
+      const now = new Date();
+      for (let i = 0; i < n; i++) {
+        keys.add(getLocalDateString(new Date(now.getTime() - i * 86400000)));
+      }
+      return keys;
+    }
+
+    function getLocalDaysList(numDays = 30) {
+      const days = [];
+      const now = new Date();
+      for (let i = numDays - 1; i >= 0; i--) {
+        const d = new Date(now.getTime() - i * 86400000);
+        const dateKey = getLocalDateString(d);
+        const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(d);
+        const monthShort = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(d);
+        const dayNum = new Intl.DateTimeFormat('en-US', { day: 'numeric' }).format(d);
+        const prettyLabel = new Intl.DateTimeFormat('en-US', { weekday: 'short', day: 'numeric', month: 'short' }).format(d);
+        days.push({
+          dateKey,
+          shortDay: weekday.slice(0, 3),
+          monthShort,
+          dayNum,
+          prettyLabel,
+          isToday: i === 0
+        });
+      }
+      return days;
+    }
+
+    function formatCompactNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(2).replace(/\.00$/, '').replace(/(\.\d)0$/, '$1') + 'M';
+      return num.toLocaleString('en-US');
+    }
+
+    function getPreferredGivenName(fullName = "") {
+      const parts = fullName.trim().split(/\s+/);
+      if (parts.length === 0) return "Member";
+      const honorificPrefixes = ["muhammad", "mohammad", "mohammed", "mohd", "md", "md.", "syed", "sayed", "shaikh", "sheikh", "hafiz", "molana", "maulana"];
+      if (parts.length > 1 && honorificPrefixes.includes(parts[0].toLowerCase())) {
+        return parts[1];
+      }
+      return parts[0];
+    }
+
+    function getClearMemberName(member, memberMap) {
+      if (!member) return "Unknown Member";
+      if (member.isPrimary) return member.name;
+
+      const raw = (member.name || "").trim();
+      if (member.customNameLocked || raw.includes("'s") || raw.includes("’s")) {
+        return raw;
+      }
+
+      const parent = memberMap[member.parentUid];
+      if (!parent) return raw;
+
+      const preferredParentName = getPreferredGivenName(parent.name);
+      const parentParts = (parent.name || "").toLowerCase().split(/\s+/);
+      const rawLower = raw.toLowerCase();
+
+      if (parentParts.some(p => p.length > 2 && rawLower.includes(p))) {
+        return raw;
+      }
+
+      return `${preferredParentName}'s ${raw}`;
+    }
+
+    function getLeaderboardDisplayName(member, memberMap) {
+      if (!member) return "Unknown";
+      if (member.privacy === "anonymous") return "Anonymous Member";
+      if (member.privacy === "private") return "Hidden Member";
+      return getClearMemberName(member, memberMap);
+    }
+
+    async function ensureDefaultAamaal() {
+      const snap = await getDocs(collection(db, "aamaal"));
+      if (snap.empty) {
+        const defaults = [
+          { id: "durood_313", name: "Durood Shareef", arabic: "اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ", target: 313, order: 1, active: true },
+          { id: "surah_mulk", name: "Surah Mulk", arabic: "تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ", target: 1, order: 2, active: true },
+          { id: "istighfar_100", name: "100 Istighfar", arabic: "أَسْتَغْفِرُ اللَّهَ رَبِّي مِنْ كُلِّ ذَنْبٍ وَأَتُوبُ إِلَيْهِ", target: 100, order: 3, active: true }
+        ];
+        for (const item of defaults) {
+          await setDoc(doc(db, "aamaal", item.id), item);
+        }
+      }
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      const splash = document.getElementById("splash-screen");
+      const appBox = document.getElementById("app-container");
+      const authBox = document.getElementById("auth-options-box");
+      const status = document.getElementById("splash-status");
+
+      if (user) {
+        currentUser = user;
+        status.textContent = "Loading Aamaal Circle...";
+        authBox.classList.add("hidden");
+        selectedDateLocal = getLocalDateString();
+        adminFilterDate = getLocalDateString();
+        adminMonthlyMonth = getLocalDateString().slice(0, 7);
+        userMonthlyReportMonth = getLocalDateString().slice(0, 7);
+        await bootApp(user);
+      } else {
+        currentUser = null;
+        splash.classList.remove("hidden");
+        appBox.classList.add("hidden");
+        authBox.classList.remove("hidden");
+        status.textContent = "Sign in with Google or Mobile & PIN";
+      }
+    });
+
+    // --- GOOGLE LOGIN ---
+    document.getElementById("login-btn").addEventListener("click", async () => {
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        alert("Google Sign-in error: " + err.message);
+      }
+    });
+
+    // --- MOBILE NUMBER + PIN: SEPARATE SIGN IN vs REGISTER TABS ---
+    document.getElementById("toggle-phone-auth-btn").addEventListener("click", () => {
+      document.getElementById("phone-auth-panel").classList.toggle("hidden");
+    });
+
+    const tabSignIn = document.getElementById("tab-mobile-signin");
+    const tabRegister = document.getElementById("tab-mobile-register");
+    const registerNameWrap = document.getElementById("register-name-wrap");
+    const phoneSignInBtn = document.getElementById("phone-signin-btn");
+    const phoneRegisterBtn = document.getElementById("phone-register-btn");
+    const phonePinInput = document.getElementById("phone-pin-input");
+
+    tabSignIn.addEventListener("click", () => {
+      tabSignIn.classList.add("active");
+      tabRegister.classList.remove("active");
+      registerNameWrap.classList.add("hidden");
+      phoneSignInBtn.classList.remove("hidden");
+      phoneRegisterBtn.classList.add("hidden");
+      phonePinInput.placeholder = "Enter Your 4-Digit PIN";
+    });
+
+    tabRegister.addEventListener("click", () => {
+      tabRegister.classList.add("active");
+      tabSignIn.classList.remove("active");
+      registerNameWrap.classList.remove("hidden");
+      phoneRegisterBtn.classList.remove("hidden");
+      phoneSignInBtn.classList.add("hidden");
+      phonePinInput.placeholder = "Create a 4-Digit Secret PIN (e.g. 1234)";
+    });
+
+    function normalizePhoneWithCountry(rawPhone, dialCode) {
+      const digits = rawPhone.replace(/\D/g, "");
+      if (digits.length < 7) return null;
+      if (rawPhone.trim().startsWith("+")) return "+" + digits;
+      return `${dialCode}${digits}`;
+    }
+
+    // 1. EXISTING MEMBER SIGN IN BUTTON (Never asks for Name)
+    phoneSignInBtn.addEventListener("click", async () => {
+      const dialCode = document.getElementById("phone-country-code").value;
+      const rawPhone = document.getElementById("phone-number-input").value.trim();
+      const rawPin = phonePinInput.value.trim();
+
+      const e164Phone = normalizePhoneWithCountry(rawPhone, dialCode);
+      if (!e164Phone) return alert("Please enter your registered mobile number.");
+      if (!rawPin || rawPin.length < 4) return alert("Please enter your 4-digit PIN.");
+
+      const syntheticEmail = `${e164Phone.replace("+", "")}@aamaalcircle.app`;
+      const syntheticPass = `Pin_${rawPin}_Islaah`;
+      pendingPhoneSignupName = "";
+      pendingPhoneNumber = e164Phone;
+
+      const status = document.getElementById("splash-status");
+      status.textContent = "Signing in...";
+
+      try {
+        await signInWithEmailAndPassword(auth, syntheticEmail, syntheticPass);
+      } catch (err) {
+        status.textContent = "Sign-in failed.";
+        if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+          alert("❌ Incorrect Mobile Number or 4-Digit PIN.\n\n• If you are already registered, double-check your PIN and Country Code.\n• If you are a new member, tap the '✨ Register (New)' tab above!");
+        } else if (err.code === "auth/operation-not-allowed") {
+          alert("Admin Setup Needed: In Firebase Console -> Authentication -> Sign-in method, please enable 'Email/Password'!");
+        } else {
+          alert("Sign-in error: " + err.message);
+        }
+      }
+    });
+
+    // 2. NEW MEMBER REGISTER BUTTON (Requires Full Name)
+    phoneRegisterBtn.addEventListener("click", async () => {
+      const rawName = document.getElementById("phone-user-name").value.trim();
+      const dialCode = document.getElementById("phone-country-code").value;
+      const rawPhone = document.getElementById("phone-number-input").value.trim();
+      const rawPin = phonePinInput.value.trim();
+
+      if (!rawName) return alert("Please enter your Full Name to register.");
+      const e164Phone = normalizePhoneWithCountry(rawPhone, dialCode);
+      if (!e164Phone) return alert("Please enter a valid mobile number.");
+      if (!rawPin || rawPin.length < 4) return alert("Please create at least a 4-digit PIN.");
+
+      const syntheticEmail = `${e164Phone.replace("+", "")}@aamaalcircle.app`;
+      const syntheticPass = `Pin_${rawPin}_Islaah`;
+      pendingPhoneSignupName = rawName;
+      pendingPhoneNumber = e164Phone;
+
+      const status = document.getElementById("splash-status");
+      status.textContent = "Creating your account...";
+
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, syntheticEmail, syntheticPass);
+        await updateProfile(cred.user, { displayName: rawName });
+      } catch (createErr) {
+        status.textContent = "Registration failed.";
+        if (createErr.code === "auth/email-already-in-use") {
+          alert("ℹ️ This mobile number is already registered! Switching you to the '🔑 Sign In (Existing)' tab—just enter your PIN to sign in.");
+          tabSignIn.click();
+        } else if (createErr.code === "auth/operation-not-allowed") {
+          alert("Admin Setup Needed: In Firebase Console -> Authentication -> Sign-in method, please enable 'Email/Password'!");
+        } else {
+          alert("Registration error: " + createErr.message);
+        }
+      }
+    });
+
+    async function bootApp(user) {
+      await ensureDefaultAamaal();
+
+      const autoLoc = detectLocationFromTimezone();
+      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const mainRef = doc(db, "members", user.uid);
+      const mainSnap = await getDoc(mainRef);
+
+      if (!mainSnap.exists()) {
+        const allSnap = await getDocs(collection(db, "members"));
+        const isFirstEver = allSnap.empty;
+        const chosenName = pendingPhoneSignupName || user.displayName || user.phoneNumber || "Circle Member";
+        await setDoc(mainRef, {
+          id: user.uid,
+          parentUid: user.uid,
+          isPrimary: true,
+          name: chosenName,
+          customNameLocked: Boolean(pendingPhoneSignupName),
+          phone: pendingPhoneNumber || user.phoneNumber || "",
+          email: user.email || "",
+          country: autoLoc.country,
+          flag: autoLoc.flag,
+          timeZone: userTz,
+          privacy: "public",
+          role: isFirstEver ? "admin" : "member",
+          createdAt: Date.now()
+        });
+        isFirstLogin = true;
+      } else {
+        const existingData = mainSnap.data();
+        if (!existingData.countryLocked && (!existingData.country || existingData.timeZone !== userTz)) {
+          await updateDoc(mainRef, {
+            country: autoLoc.country,
+            flag: autoLoc.flag,
+            timeZone: userTz
+          });
+        }
+      }
+
+      await loadAamaalTabs();
+      await loadMembersAndProfiles(user.uid);
+      populateAdminDropdowns();
+      populateUserMonthlyDropdowns();
+      await loadLogsAndRender(true);
+
+      document.getElementById("splash-screen").classList.add("hidden");
+      document.getElementById("app-container").classList.remove("hidden");
+
+      if (isFirstLogin) {
+        openSettingsModal();
+      }
+    }
+
+    async function loadAamaalTabs() {
+      const snap = await getDocs(collection(db, "aamaal"));
+      allAamaalRaw = [];
+      aamaalList = [];
+      snap.forEach(d => {
+        const data = d.data();
+        allAamaalRaw.push(data);
+        if (data.active !== false) aamaalList.push(data);
+      });
+      allAamaalRaw.sort((a, b) => (a.order || 1) - (b.order || 1));
+      aamaalList.sort((a, b) => (a.order || 1) - (b.order || 1));
+
+      if (!activeAamaal || !aamaalList.find(a => a.id === activeAamaal.id)) {
+        activeAamaal = aamaalList[0] || allAamaalRaw[0];
+      }
+      if (!adminFilterAamaalId && allAamaalRaw.length > 0) {
+        adminFilterAamaalId = allAamaalRaw[0].id;
+      }
+      if (!adminMonthlyAamaalId && allAamaalRaw.length > 0) {
+        adminMonthlyAamaalId = allAamaalRaw[0].id;
+      }
+      if (!userMonthlyAamaalId && aamaalList.length > 0) {
+        userMonthlyAamaalId = aamaalList[0].id;
+      }
+      renderAamaalTabs();
+    }
+
+    function renderAamaalTabs() {
+      const container = document.getElementById("aamaal-tabs-container");
+      container.innerHTML = "";
+      aamaalList.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "aamaal-tab" + (item.id === activeAamaal.id ? " active" : "");
+        btn.textContent = item.name;
+        btn.addEventListener("click", async () => {
+          activeAamaal = item;
+          userMonthlyAamaalId = item.id;
+          selectedDateLocal = getLocalDateString();
+          renderAamaalTabs();
+          await loadLogsAndRender(true);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    async function loadMembersAndProfiles(preferredProfileId) {
+      const snap = await getDocs(collection(db, "members"));
+      allMembers = [];
+      myProfiles = [];
+      snap.forEach(d => {
+        const m = d.data();
+        allMembers.push(m);
+        if (m.parentUid === currentUser.uid) {
+          myProfiles.push(m);
+        }
+      });
+      myProfiles.sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
+
+      activeProfile = myProfiles.find(p => p.id === preferredProfileId) || myProfiles[0];
+      selectedPrivacy = activeProfile ? (activeProfile.privacy || "public") : "public";
+
+      if (!adminMonthlyMemberId || !allMembers.find(m => m.id === adminMonthlyMemberId)) {
+        adminMonthlyMemberId = activeProfile ? activeProfile.id : (allMembers[0]?.id || "");
+      }
+
+      updateTopBarUI();
+    }
+
+    function updateTopBarUI() {
+      if (!activeProfile) return;
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+
+      const clearActiveName = getClearMemberName(activeProfile, memberMap);
+      const activeFlag = getMemberFlag(activeProfile, memberMap);
+      document.getElementById("active-member-flag").textContent = activeFlag;
+      document.getElementById("active-member-name").textContent = clearActiveName;
+      document.getElementById("privacy-target-name").textContent = clearActiveName;
+
+      const primary = myProfiles.find(p => p.isPrimary);
+      const isAdmin = primary && primary.role === "admin";
+      document.getElementById("admin-badge").classList.toggle("hidden", !isAdmin);
+      document.getElementById("admin-spacer").classList.toggle("hidden", isAdmin);
+
+      const menu = document.getElementById("quick-member-menu");
+      menu.innerHTML = "";
+      myProfiles.forEach(prof => {
+        const item = document.createElement("div");
+        item.className = "quick-dropdown-item" + (prof.id === activeProfile.id ? " active" : "");
+        const displayName = getClearMemberName(prof, memberMap);
+        const flag = getMemberFlag(prof, memberMap);
+        item.innerHTML = `<span>${flag} ${displayName}</span><span>${prof.id === activeProfile.id ? "✓" : ""}</span>`;
+        item.addEventListener("click", async () => {
+          activeProfile = prof;
+          selectedPrivacy = prof.privacy || "public";
+          selectedDateLocal = getLocalDateString();
+          menu.classList.add("hidden");
+          updateTopBarUI();
+          renderDailyScreen(true);
+          renderStatsScreen();
+          renderUserMonthlyReport();
+        });
+        menu.appendChild(item);
+      });
+    }
+
+    const quickMemberBtn = document.getElementById("quick-member-btn");
+    const quickMemberMenu = document.getElementById("quick-member-menu");
+    quickMemberBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      quickMemberMenu.classList.toggle("hidden");
+    });
+    document.addEventListener("click", () => { quickMemberMenu.classList.add("hidden"); });
+
+    function populateUserMonthlyDropdowns() {
+      const aamaalSel = document.getElementById("user-monthly-aamaal-select");
+      const monthInput = document.getElementById("user-monthly-month-picker");
+      const todayLocal = getLocalDateString();
+
+      aamaalSel.innerHTML = "";
+      aamaalList.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = a.name;
+        if (a.id === userMonthlyAamaalId) opt.selected = true;
+        aamaalSel.appendChild(opt);
+      });
+
+      monthInput.value = userMonthlyReportMonth;
+      monthInput.max = todayLocal.slice(0, 7);
+    }
+
+    function populateAdminDropdowns() {
+      const dateInput = document.getElementById("admin-date-picker");
+      const aamaalSel = document.getElementById("admin-aamaal-select");
+      const memberSel = document.getElementById("admin-monthly-member-select");
+      const monthlyAamaalSel = document.getElementById("admin-monthly-aamaal-select");
+      const monthInput = document.getElementById("admin-monthly-month-picker");
+
+      const todayLocal = getLocalDateString();
+      dateInput.value = adminFilterDate;
+      dateInput.max = todayLocal;
+
+      aamaalSel.innerHTML = "";
+      monthlyAamaalSel.innerHTML = "";
+      allAamaalRaw.forEach(a => {
+        const opt1 = document.createElement("option");
+        opt1.value = a.id;
+        opt1.textContent = a.name;
+        if (a.id === adminFilterAamaalId) opt1.selected = true;
+        aamaalSel.appendChild(opt1);
+
+        const opt2 = document.createElement("option");
+        opt2.value = a.id;
+        opt2.textContent = a.name;
+        if (a.id === adminMonthlyAamaalId) opt2.selected = true;
+        monthlyAamaalSel.appendChild(opt2);
+      });
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+
+      const sortedMembers = [...allMembers].sort((a, b) =>
+        getClearMemberName(a, memberMap).localeCompare(getClearMemberName(b, memberMap))
+      );
+
+      memberSel.innerHTML = "";
+      sortedMembers.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = `${getMemberFlag(m, memberMap)} ${getClearMemberName(m, memberMap)}`;
+        if (m.id === adminMonthlyMemberId) opt.selected = true;
+        memberSel.appendChild(opt);
+      });
+
+      monthInput.value = adminMonthlyMonth;
+      monthInput.max = todayLocal.slice(0, 7);
+    }
+
+    document.getElementById("admin-date-picker").addEventListener("change", (e) => {
+      if (e.target.value) {
+        adminFilterDate = e.target.value;
+        renderAdminScreen();
+      }
+    });
+
+    document.getElementById("admin-aamaal-select").addEventListener("change", (e) => {
+      adminFilterAamaalId = e.target.value;
+      renderAdminScreen();
+    });
+
+    document.getElementById("admin-monthly-member-select").addEventListener("change", (e) => {
+      adminMonthlyMemberId = e.target.value;
+      renderAdminMemberMonthlyReport();
+    });
+
+    document.getElementById("admin-monthly-aamaal-select").addEventListener("change", (e) => {
+      adminMonthlyAamaalId = e.target.value;
+      renderAdminMemberMonthlyReport();
+    });
+
+    document.getElementById("admin-monthly-month-picker").addEventListener("change", (e) => {
+      if (e.target.value) {
+        adminMonthlyMonth = e.target.value;
+        renderAdminMemberMonthlyReport();
+      }
+    });
+
+    document.getElementById("user-monthly-aamaal-select").addEventListener("change", (e) => {
+      userMonthlyAamaalId = e.target.value;
+      renderUserMonthlyReport();
+    });
+
+    document.getElementById("user-monthly-month-picker").addEventListener("change", (e) => {
+      if (e.target.value) {
+        userMonthlyReportMonth = e.target.value;
+        renderUserMonthlyReport();
+      }
+    });
+
+    document.getElementById("daily-any-date-picker").addEventListener("change", (e) => {
+      if (e.target.value) {
+        selectedDateLocal = e.target.value;
+        renderDailyScreen(true);
+      }
+    });
+
+    async function loadLogsAndRender(scrollStripToSelected = false) {
+      if (!activeAamaal) return;
+      const q = query(collection(db, "logs"));
+      const snap = await getDocs(q);
+      allLogsForAamaal = [];
+      snap.forEach(d => allLogsForAamaal.push(d.data()));
+
+      renderDailyScreen(scrollStripToSelected);
+      renderStatsScreen();
+      renderAdminScreen();
+      renderUserMonthlyReport();
+    }
+
+    function renderDailyScreen(scrollStripToSelected = false) {
+      if (!activeAamaal || !activeProfile) return;
+
+      const todayLocal = getLocalDateString();
+      const last30Days = getLocalDaysList(30);
+      const last7DaysKeys = getLastNDaysKeys(7);
+
+      const dailyPicker = document.getElementById("daily-any-date-picker");
+      dailyPicker.value = selectedDateLocal;
+      dailyPicker.max = todayLocal;
+
+      const selectedDayIn30 = last30Days.find(d => d.dateKey === selectedDateLocal);
+      const friendlyDateText = (selectedDateLocal === todayLocal)
+        ? "Today"
+        : (selectedDayIn30 ? selectedDayIn30.prettyLabel : formatAnyDatePretty(selectedDateLocal));
+
+      document.getElementById("current-aamaal-title").textContent = activeAamaal.name;
+      document.getElementById("current-aamaal-arabic").textContent = activeAamaal.arabic;
+      
+      document.getElementById("active-date-banner").textContent = `📅 Logging for: ${friendlyDateText}`;
+      document.getElementById("selected-date-label").textContent = friendlyDateText;
+
+      document.getElementById("target-question-text").textContent =
+        `Have you recited your daily target of ${activeAamaal.target} times ${activeAamaal.name} on ${friendlyDateText}?`;
+      document.getElementById("stat-card-aamaal-1").textContent = activeAamaal.name;
+      document.getElementById("stat-card-aamaal-2").textContent = activeAamaal.name;
+
+      const dynamicSummaryText = `View the total number of ${activeAamaal.name} recited`;
+      document.getElementById("bottom-summary-text").textContent = dynamicSummaryText;
+      document.getElementById("stats-top-title-text").textContent = dynamicSummaryText;
+
+      const myLogs = allLogsForAamaal.filter(l => l.memberId === activeProfile.id && l.aamaalId === activeAamaal.id);
+      const selectedLog = myLogs.find(l => l.dateKey === selectedDateLocal);
+
+      const notRecitedBox = document.getElementById("not-recited-box");
+      const recitedBox = document.getElementById("recited-box");
+      const extraPanel = document.getElementById("extra-count-panel");
+
+      if (selectedLog) {
+        notRecitedBox.classList.add("hidden");
+        recitedBox.classList.remove("hidden");
+        document.getElementById("today-logged-num").textContent = selectedLog.count.toLocaleString('en-US');
+        document.getElementById("custom-count-input").value = selectedLog.count;
+      } else {
+        notRecitedBox.classList.remove("hidden");
+        recitedBox.classList.add("hidden");
+        extraPanel.classList.add("hidden");
+      }
+
+      const stripContainer = document.getElementById("week-strip-container");
+      const previousScrollLeft = stripContainer.scrollLeft;
+      stripContainer.innerHTML = "";
+      const myDoneMap = {};
+      myLogs.forEach(l => { myDoneMap[l.dateKey] = l.count; });
+
+      let selectedElement = null;
+
+      last30Days.forEach(d => {
+        const count = myDoneMap[d.dateKey] || 0;
+        const done = count > 0;
+        const isSelected = (d.dateKey === selectedDateLocal);
+        const cell = document.createElement("div");
+        cell.className = "day-cell" + (isSelected ? " selected-day" : "") + (d.isToday ? " is-today" : "");
+
+        cell.innerHTML = `
+          <div class="day-month-tag">${d.monthShort}</div>
+          <div class="day-name">${d.isToday ? 'Today' : d.shortDay}</div>
+          <div class="day-num">${d.dayNum}</div>
+          <div class="status-dot ${done ? 'dot-done' : 'dot-missed'}"></div>
+          <div class="day-mini-count">${done ? formatCompactNumber(count) : '–'}</div>
+        `;
+        cell.addEventListener("click", () => {
+          selectedDateLocal = d.dateKey;
+          renderDailyScreen(false);
+        });
+        stripContainer.appendChild(cell);
+        if (isSelected) selectedElement = cell;
+      });
+
+      if (scrollStripToSelected && selectedElement) {
+        setTimeout(() => {
+          selectedElement.scrollIntoView({ behavior: 'smooth', inline: 'end', block: 'nearest' });
+        }, 50);
+      } else {
+        stripContainer.scrollLeft = previousScrollLeft;
+      }
+
+      const todayLog = myLogs.find(l => l.dateKey === todayLocal);
+      const myTodayCount = todayLog ? Number(todayLog.count) : 0;
+      const myWeekCount = myLogs
+        .filter(l => last7DaysKeys.has(l.dateKey))
+        .reduce((sum, l) => sum + Number(l.count || 0), 0);
+
+      document.getElementById("my-today-total").textContent = myTodayCount.toLocaleString('en-US');
+      document.getElementById("my-week-total").textContent = myWeekCount.toLocaleString('en-US');
+    }
+
+    document.getElementById("reset-to-today-link").addEventListener("click", () => {
+      selectedDateLocal = getLocalDateString();
+      renderDailyScreen(true);
+    });
+
+    document.getElementById("mark-recited-btn").addEventListener("click", async () => {
+      if (!activeAamaal || !activeProfile) return;
+      const logId = `${selectedDateLocal}_${activeAamaal.id}_${activeProfile.id}`;
+      await setDoc(doc(db, "logs", logId), {
+        id: logId,
+        aamaalId: activeAamaal.id,
+        memberId: activeProfile.id,
+        parentUid: currentUser.uid,
+        dateKey: selectedDateLocal,
+        count: Number(activeAamaal.target),
+        updatedAt: Date.now()
+      });
+      await loadLogsAndRender(false);
+    });
+
+    document.getElementById("toggle-extra-btn").addEventListener("click", () => {
+      document.getElementById("extra-count-panel").classList.toggle("hidden");
+    });
+
+    document.querySelectorAll(".chip-btn").forEach(chip => {
+      chip.addEventListener("click", async () => {
+        const addVal = Number(chip.dataset.add);
+        const logId = `${selectedDateLocal}_${activeAamaal.id}_${activeProfile.id}`;
+        const existing = allLogsForAamaal.find(l => l.id === logId);
+        const newTotal = (existing ? Number(existing.count) : 0) + addVal;
+
+        await setDoc(doc(db, "logs", logId), {
+          id: logId,
+          aamaalId: activeAamaal.id,
+          memberId: activeProfile.id,
+          parentUid: currentUser.uid,
+          dateKey: selectedDateLocal,
+          count: newTotal,
+          updatedAt: Date.now()
+        }, { merge: true });
+        await loadLogsAndRender(false);
+      });
+    });
+
+    document.getElementById("save-custom-count-btn").addEventListener("click", async () => {
+      const val = Number(document.getElementById("custom-count-input").value);
+      if (val < 0) return alert("Please enter a valid number.");
+      const logId = `${selectedDateLocal}_${activeAamaal.id}_${activeProfile.id}`;
+      
+      if (val === 0) {
+        await deleteDoc(doc(db, "logs", logId));
+      } else {
+        await setDoc(doc(db, "logs", logId), {
+          id: logId,
+          aamaalId: activeAamaal.id,
+          memberId: activeProfile.id,
+          parentUid: currentUser.uid,
+          dateKey: selectedDateLocal,
+          count: val,
+          updatedAt: Date.now()
+        }, { merge: true });
+      }
+      document.getElementById("extra-count-panel").classList.add("hidden");
+      await loadLogsAndRender(false);
+    });
+
+    document.getElementById("undo-today-btn").addEventListener("click", async () => {
+      const logId = `${selectedDateLocal}_${activeAamaal.id}_${activeProfile.id}`;
+      await deleteDoc(doc(db, "logs", logId));
+      await loadLogsAndRender(false);
+    });
+
+    function renderTopByCountryList(logsSubset, memberMap, containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = "";
+
+      const countryTotals = {};
+      logsSubset.forEach(l => {
+        const m = memberMap[l.memberId];
+        const country = getMemberCountry(m, memberMap);
+        countryTotals[country] = (countryTotals[country] || 0) + Number(l.count || 0);
+      });
+
+      const rows = Object.keys(countryTotals)
+        .map(country => ({
+          country,
+          flag: COUNTRY_FLAGS[country] || "🌍",
+          total: countryTotals[country]
+        }))
+        .filter(r => r.total > 0)
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+
+      if (rows.length === 0) {
+        container.innerHTML = `<div style="font-size:13px;color:#94a3b8;padding:6px 0;">No recitations logged for this period yet.</div>`;
+        return;
+      }
+
+      const maxVal = Math.max(...rows.map(r => r.total), 1);
+      rows.forEach(r => {
+        const pct = Math.max(Math.round((r.total / maxVal) * 100), 4);
+        const div = document.createElement("div");
+        div.className = "country-stat-row";
+        div.innerHTML = `
+          <div class="country-stat-name"><span>${r.flag}</span><span>${r.country}</span></div>
+          <div class="country-bar-track">
+            <div class="country-bar-fill" style="width:${pct}%;"></div>
+          </div>
+          <div class="country-stat-val">${formatCompactNumber(r.total)}</div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function renderStatsScreen() {
+      if (!activeAamaal || !activeProfile) return;
+      const todayLocal = getLocalDateString();
+      const currentMonthPrefix = todayLocal.slice(0, 7);
+      const last7Days = getLocalDaysList(7);
+      const weekDateKeys = new Set(last7Days.map(d => d.dateKey));
+
+      document.getElementById("lifetime-aamaal-name").textContent = activeAamaal.name;
+      document.getElementById("leader-aamaal-name").textContent = activeAamaal.name;
+
+      const aamaalLogs = allLogsForAamaal.filter(l => l.aamaalId === activeAamaal.id);
+
+      const lifetimeTotal = aamaalLogs.reduce((sum, l) => sum + Number(l.count || 0), 0);
+      document.getElementById("group-lifetime-total").textContent = lifetimeTotal.toLocaleString('en-US');
+
+      const weekLogs = aamaalLogs.filter(l => weekDateKeys.has(l.dateKey));
+      const weekGroupTotal = weekLogs.reduce((sum, l) => sum + Number(l.count || 0), 0);
+      document.getElementById("stats-week-group-total").textContent = formatCompactNumber(weekGroupTotal);
+
+      const tenDaysAgo = Date.now() - (10 * 86400000);
+      const newMembersCount = allMembers.filter(m => (m.createdAt || 0) >= tenDaysAgo).length;
+      document.getElementById("stats-new-members").textContent = `+${newMembersCount}`;
+      document.getElementById("stats-total-members").textContent = allMembers.length.toLocaleString('en-US');
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+
+      const weeklyByMember = {};
+      weekLogs.forEach(l => {
+        weeklyByMember[l.memberId] = (weeklyByMember[l.memberId] || 0) + Number(l.count || 0);
+      });
+
+      const leaderboardRows = [];
+      Object.keys(weeklyByMember).forEach(memberId => {
+        const m = memberMap[memberId];
+        if (!m || m.privacy === "anonymous") return;
+        const displayName = getLeaderboardDisplayName(m, memberMap);
+        const flag = getMemberFlag(m, memberMap);
+        leaderboardRows.push({ name: displayName, flag, score: weeklyByMember[memberId] });
+      });
+
+      leaderboardRows.sort((a, b) => b.score - a.score);
+      const top5 = leaderboardRows.slice(0, 5);
+      const maxLeaderScore = top5.length > 0 ? Math.max(...top5.map(r => r.score), 1) : 1;
+
+      const leaderBox = document.getElementById("leaderboard-container");
+      leaderBox.innerHTML = "";
+      if (top5.length === 0) {
+        leaderBox.innerHTML = `<div style="padding:18px 4px;text-align:center;color:#94a3b8;font-size:13px;">No public/private recitations logged this week yet.</div>`;
+      } else {
+        top5.forEach((item, idx) => {
+          const pct = Math.max(Math.round((item.score / maxLeaderScore) * 100), 8);
+          const rankClass = idx === 0 ? "rank-1" : idx === 1 ? "rank-2" : idx === 2 ? "rank-3" : "";
+          const row = document.createElement("div");
+          row.className = "leader-row";
+          row.innerHTML = `
+            <div class="leader-top-line">
+              <div class="leader-left">
+                <div class="rank-circle ${rankClass}">${idx + 1}</div>
+                <span class="flag-badge">${item.flag}</span>
+                <div class="leader-name">${item.name}</div>
+              </div>
+              <div class="leader-score">${item.score.toLocaleString('en-US')}</div>
+            </div>
+            <div class="leader-bar-track">
+              <div class="leader-bar-fill" style="width:${pct}%;"></div>
+            </div>
+          `;
+          leaderBox.appendChild(row);
+        });
+      }
+
+      const groupTodayTotal = aamaalLogs
+        .filter(l => l.dateKey === todayLocal)
+        .reduce((sum, l) => sum + Number(l.count || 0), 0);
+
+      const myTodayLog = aamaalLogs.find(l => l.dateKey === todayLocal && l.memberId === activeProfile.id);
+      const myTodayTotal = myTodayLog ? Number(myTodayLog.count) : 0;
+
+      document.getElementById("group-today-total").textContent = groupTodayTotal.toLocaleString('en-US');
+      document.getElementById("my-contrib-today").textContent = myTodayTotal.toLocaleString('en-US');
+
+      const myWeekTotal = weekLogs
+        .filter(l => l.memberId === activeProfile.id)
+        .reduce((sum, l) => sum + Number(l.count || 0), 0);
+      document.getElementById("weekly-perf-group-total").textContent = formatCompactNumber(weekGroupTotal);
+      document.getElementById("weekly-perf-my-total").textContent = myWeekTotal.toLocaleString('en-US');
+      renderTopByCountryList(weekLogs, memberMap, "weekly-top-countries-list");
+
+      const monthLogs = aamaalLogs.filter(l => (l.dateKey || "").startsWith(currentMonthPrefix));
+      const monthGroupTotal = monthLogs.reduce((sum, l) => sum + Number(l.count || 0), 0);
+      const myMonthTotal = monthLogs
+        .filter(l => l.memberId === activeProfile.id)
+        .reduce((sum, l) => sum + Number(l.count || 0), 0);
+      document.getElementById("monthly-perf-group-total").textContent = formatCompactNumber(monthGroupTotal);
+      document.getElementById("monthly-perf-my-total").textContent = myMonthTotal.toLocaleString('en-US');
+      renderTopByCountryList(monthLogs, memberMap, "monthly-top-countries-list");
+
+      const barsContainer = document.getElementById("weekly-bars-container");
+      barsContainer.innerHTML = "";
+      const dailyTotals = last7Days.map(d => {
+        const sum = aamaalLogs
+          .filter(l => l.dateKey === d.dateKey)
+          .reduce((acc, l) => acc + Number(l.count || 0), 0);
+        return { ...d, total: sum };
+      });
+      const maxDayTotal = Math.max(...dailyTotals.map(d => d.total), 1);
+
+      dailyTotals.forEach(d => {
+        const heightPct = Math.max(Math.round((d.total / maxDayTotal) * 85), 6);
+        const col = document.createElement("div");
+        col.className = "bar-col";
+        col.innerHTML = `
+          <div class="bar-val">${d.total > 0 ? formatCompactNumber(d.total) : ''}</div>
+          <div class="bar-fill" style="height:${heightPct}%;"></div>
+          <div class="bar-day">${d.isToday ? 'Today' : d.shortDay}</div>
+        `;
+        barsContainer.appendChild(col);
+      });
+    }
+
+    function buildSingleAamaalMonthlyCard(member, aamaalObj, targetMonthStr, containerEl, isUserReport = false) {
+      containerEl.innerHTML = "";
+      if (!member || !aamaalObj) return;
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+
+      const clearName = getClearMemberName(member, memberMap);
+      const flag = getMemberFlag(member, memberMap);
+      const mInfo = getMonthDetails(targetMonthStr);
+      const prettyMonth = formatMonthYearPretty(targetMonthStr);
+
+      const headerBanner = document.createElement("div");
+      headerBanner.style.cssText = "background:#ecfdf5;border:1px solid #a7f3d0;padding:10px 12px;border-radius:14px;margin-bottom:12px;font-size:12.5px;color:#065f46;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;";
+      headerBanner.innerHTML = `
+        <span>${flag} <strong>${clearName}</strong> • ${prettyMonth}</span>
+        <span>${mInfo.isCurrentMonth ? `Day ${mInfo.elapsedDays} of ${mInfo.totalDaysInMonth}` : `${mInfo.totalDaysInMonth} Days`}</span>
+      `;
+      containerEl.appendChild(headerBanner);
+
+      const dailyTarget = Number(aamaalObj.target || 0);
+      const fullMonthTarget = dailyTarget * mInfo.totalDaysInMonth;
+      const targetTillNow = dailyTarget * mInfo.elapsedDays;
+      const comparisonTarget = mInfo.isCurrentMonth ? targetTillNow : fullMonthTarget;
+
+      const memberMonthLogs = allLogsForAamaal.filter(
+        l => l.memberId === member.id && l.aamaalId === aamaalObj.id && (l.dateKey || "").startsWith(targetMonthStr)
+      );
+
+      const dayCountMap = {};
+      let actualCount = 0;
+      memberMonthLogs.forEach(l => {
+        const c = Number(l.count || 0);
+        if (c > 0) {
+          dayCountMap[l.dateKey] = c;
+          actualCount += c;
+        }
+      });
+
+      const daysCompleted = Object.keys(dayCountMap).length;
+      const daysMissed = Math.max(mInfo.elapsedDays - daysCompleted, 0);
+      const totalMissedCount = daysMissed * dailyTarget;
+      const pct = comparisonTarget > 0 ? Math.round((actualCount / comparisonTarget) * 100) : 0;
+      const barWidth = Math.min(Math.max(pct, 4), 100);
+      const diff = actualCount - comparisonTarget;
+
+      let diffBadge = "";
+      if (diff >= 0) {
+        diffBadge = `<span class="pill-tag ahead">✓ +${diff.toLocaleString('en-US')} Ahead (${pct}%)</span>`;
+      } else {
+        diffBadge = `<span class="pill-tag behind">${Math.abs(diff).toLocaleString('en-US')} Remaining (${pct}%)</span>`;
+      }
+
+      let daysGridHtml = "";
+      for (let d = 1; d <= mInfo.totalDaysInMonth; d++) {
+        const dayStr = String(d).padStart(2, "0");
+        const fullDateKey = `${targetMonthStr}-${dayStr}`;
+        const c = dayCountMap[fullDateKey] || 0;
+        let stateClass = "future";
+        if (d <= mInfo.elapsedDays) {
+          stateClass = c > 0 ? "done" : "missed";
+        } else if (c > 0) {
+          stateClass = "done";
+        }
+        daysGridHtml += `<div class="mini-cal-day ${stateClass}" data-date="${fullDateKey}" title="${fullDateKey}: ${c} recited">${d}</div>`;
+      }
+
+      const box = document.createElement("div");
+      box.className = "monthly-aamaal-box";
+      box.innerHTML = `
+        <div class="admin-row-top">
+          <div>
+            <div style="font-weight:800;font-size:15px;color:#0f172a;">${aamaalObj.name}</div>
+            <div style="font-size:11px;color:#64748b;">Daily Target: ${dailyTarget.toLocaleString('en-US')}/day</div>
+          </div>
+          ${diffBadge}
+        </div>
+
+        <div class="monthly-metrics-grid">
+          <div class="monthly-metric-item">
+            <div class="monthly-metric-val" style="color:#0f766e;">${actualCount.toLocaleString('en-US')}</div>
+            <div class="monthly-metric-lbl">Actual Recited</div>
+          </div>
+          <div class="monthly-metric-item">
+            <div class="monthly-metric-val">${comparisonTarget.toLocaleString('en-US')}</div>
+            <div class="monthly-metric-lbl">${mInfo.isCurrentMonth ? `Target (${mInfo.elapsedDays}d)` : `Month Target (${mInfo.totalDaysInMonth}d)`}</div>
+          </div>
+          <div class="monthly-metric-item">
+            <div class="monthly-metric-val" style="color:${daysMissed > 0 ? '#b91c1c' : '#166534'};">${daysMissed} Days</div>
+            <div class="monthly-metric-lbl">Missed (${totalMissedCount.toLocaleString('en-US')})</div>
+          </div>
+        </div>
+
+        <div style="font-size:11.5px;color:#475569;margin-bottom:6px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+          <span>Consistency: <strong>${daysCompleted}/${mInfo.elapsedDays} days logged</strong></span>
+          <span>Full ${mInfo.totalDaysInMonth}d Target: <strong>${fullMonthTarget.toLocaleString('en-US')}</strong></span>
+        </div>
+
+        <div class="leader-bar-track" style="height:7px;margin-bottom:10px;">
+          <div class="leader-bar-fill" style="width:${barWidth}%;"></div>
+        </div>
+
+        <div style="font-size:10.5px;color:#64748b;font-weight:600;">
+          ${isUserReport ? 'Tap any day below to jump to that date & log/edit:' : 'Tap any day below to jump & edit in Admin Inspector:'}
+        </div>
+        <div class="mini-month-cal-grid">${daysGridHtml}</div>
+      `;
+
+      box.querySelectorAll(".mini-cal-day").forEach(dayEl => {
+        dayEl.addEventListener("click", () => {
+          const clickedDate = dayEl.dataset.date;
+          if (!clickedDate) return;
+          if (isUserReport) {
+            selectedDateLocal = clickedDate;
+            activeAamaal = aamaalObj;
+            renderAamaalTabs();
+            document.getElementById("user-monthly-view").classList.add("hidden");
+            document.getElementById("daily-view").classList.remove("hidden");
+            loadLogsAndRender(false);
+            window.scrollTo(0, 0);
+          } else {
+            adminFilterDate = clickedDate;
+            adminFilterAamaalId = aamaalObj.id;
+            document.getElementById("admin-date-picker").value = clickedDate;
+            document.getElementById("admin-aamaal-select").value = aamaalObj.id;
+            renderAdminScreen();
+            document.getElementById("admin-daily-inspector-card").scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      });
+
+      containerEl.appendChild(box);
+    }
+
+    function renderUserMonthlyReport() {
+      const container = document.getElementById("user-monthly-breakdown-container");
+      const monthPicker = document.getElementById("user-monthly-month-picker");
+      const aamaalSel = document.getElementById("user-monthly-aamaal-select");
+      if (!container || !monthPicker || !aamaalSel) return;
+
+      monthPicker.value = userMonthlyReportMonth;
+      monthPicker.max = getLocalDateString().slice(0, 7);
+
+      if (!userMonthlyAamaalId && aamaalList.length > 0) {
+        userMonthlyAamaalId = aamaalList[0].id;
+      }
+      aamaalSel.value = userMonthlyAamaalId;
+
+      const chosenAamaal = aamaalList.find(a => a.id === userMonthlyAamaalId) || aamaalList[0];
+      if (activeProfile && chosenAamaal) {
+        buildSingleAamaalMonthlyCard(activeProfile, chosenAamaal, userMonthlyReportMonth, container, true);
+      }
+    }
+
+    function renderAdminMemberMonthlyReport() {
+      const container = document.getElementById("admin-member-monthly-breakdown");
+      const monthInput = document.getElementById("admin-monthly-month-picker");
+      const aamaalSel = document.getElementById("admin-monthly-aamaal-select");
+      if (!container || !monthInput || !aamaalSel) return;
+
+      monthInput.value = adminMonthlyMonth;
+      monthInput.max = getLocalDateString().slice(0, 7);
+
+      if (!adminMonthlyAamaalId && allAamaalRaw.length > 0) {
+        adminMonthlyAamaalId = allAamaalRaw[0].id;
+      }
+      aamaalSel.value = adminMonthlyAamaalId;
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const member = memberMap[adminMonthlyMemberId] || allMembers[0];
+      const chosenAamaal = allAamaalRaw.find(a => a.id === adminMonthlyAamaalId) || allAamaalRaw[0];
+
+      if (!member || !chosenAamaal) {
+        container.innerHTML = `<div style="text-align:center;color:#94a3b8;font-size:13px;">No member or aamaal selected.</div>`;
+        return;
+      }
+
+      buildSingleAamaalMonthlyCard(member, chosenAamaal, adminMonthlyMonth, container, false);
+    }
+
+    document.getElementById("copy-monthly-whatsapp-btn").addEventListener("click", async () => {
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const member = memberMap[adminMonthlyMemberId] || allMembers[0];
+      const chosenAamaal = allAamaalRaw.find(a => a.id === adminMonthlyAamaalId) || allAamaalRaw[0];
+      if (!member || !chosenAamaal) return;
+
+      const clearName = getClearMemberName(member, memberMap);
+      const flag = getMemberFlag(member, memberMap);
+      const mInfo = getMonthDetails(adminMonthlyMonth);
+      const prettyMonth = formatMonthYearPretty(adminMonthlyMonth);
+
+      const dailyTarget = Number(chosenAamaal.target || 0);
+      const comparisonTarget = dailyTarget * mInfo.elapsedDays;
+      const fullMonthTarget = dailyTarget * mInfo.totalDaysInMonth;
+
+      const logs = allLogsForAamaal.filter(
+        l => l.memberId === member.id && l.aamaalId === chosenAamaal.id && (l.dateKey || "").startsWith(adminMonthlyMonth)
+      );
+      const actual = logs.reduce((s, l) => s + Number(l.count || 0), 0);
+      const daysDone = logs.filter(l => Number(l.count || 0) > 0).length;
+      const daysMissed = Math.max(mInfo.elapsedDays - daysDone, 0);
+      const missedCount = daysMissed * dailyTarget;
+      const pct = comparisonTarget > 0 ? Math.round((actual / comparisonTarget) * 100) : 0;
+
+      let lines = [];
+      lines.push(`🌙 *Islaah Foundation's Aamaal Circle*`);
+      lines.push(`📊 *Monthly Progress Report*`);
+      lines.push(`👤 *Member:* ${flag} ${clearName}`);
+      lines.push(`📿 *Aamaal:* ${chosenAamaal.name}`);
+      lines.push(`🗓️ *Month:* ${prettyMonth} (${mInfo.isCurrentMonth ? `${mInfo.elapsedDays} days elapsed` : `${mInfo.totalDaysInMonth} days`})`);
+      lines.push(`────────────────────`);
+      lines.push(`• Recited: *${actual.toLocaleString('en-US')}* / ${comparisonTarget.toLocaleString('en-US')} (${pct}%)`);
+      lines.push(`• Full Month Target: ${fullMonthTarget.toLocaleString('en-US')}`);
+      lines.push(`• Consistency: ${daysDone}/${mInfo.elapsedDays} days done`);
+      lines.push(`• Missed: *${daysMissed} days* (${missedCount.toLocaleString('en-US')} count)`);
+
+      const textToCopy = lines.join("\n").trim();
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        alert(`✅ Monthly Report for ${clearName} copied! Ready to paste in WhatsApp.`);
+      } catch (e) {
+        prompt("Copy the Monthly Report below:", textToCopy);
+      }
+    });
+
+    document.getElementById("export-member-month-csv-btn").addEventListener("click", () => {
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const member = memberMap[adminMonthlyMemberId] || allMembers[0];
+      const chosenAamaal = allAamaalRaw.find(a => a.id === adminMonthlyAamaalId) || allAamaalRaw[0];
+      if (!member || !chosenAamaal) return;
+
+      const clearName = getClearMemberName(member, memberMap);
+      const country = getMemberCountry(member, memberMap);
+      const mInfo = getMonthDetails(adminMonthlyMonth);
+
+      let csvRows = [];
+      csvRows.push(["Date", "Member Name", "Country", "Aamaal Name", "Daily Target", "Actual Recited", "Status"].join(","));
+
+      for (let d = 1; d <= mInfo.totalDaysInMonth; d++) {
+        const dayStr = String(d).padStart(2, "0");
+        const dateKey = `${adminMonthlyMonth}-${dayStr}`;
+        const log = allLogsForAamaal.find(l => l.memberId === member.id && l.aamaalId === chosenAamaal.id && l.dateKey === dateKey);
+        const actual = log ? Number(log.count || 0) : 0;
+        const status = actual >= chosenAamaal.target ? "Target Met" : (actual > 0 ? "Partial" : (d <= mInfo.elapsedDays ? "Missed" : "Upcoming"));
+        csvRows.push(`"${dateKey}","${clearName.replace(/"/g, '""')}","${country}","${chosenAamaal.name.replace(/"/g, '""')}",${chosenAamaal.target},${actual},"${status}"`);
+      }
+
+      const blob = new Blob([csvRows.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${clearName.replace(/\s+/g, '_')}_${chosenAamaal.name.replace(/\s+/g, '_')}_${adminMonthlyMonth}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    function renderAdminScreen() {
+      const keys7 = getLastNDaysKeys(7);
+      const keys30 = getLastNDaysKeys(30);
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+
+      if (!adminFilterAamaalId && allAamaalRaw.length > 0) {
+        adminFilterAamaalId = allAamaalRaw[0].id;
+      }
+      const targetAamaal = allAamaalRaw.find(a => a.id === adminFilterAamaalId) || allAamaalRaw[0];
+
+      const personWiseBox = document.getElementById("admin-person-wise-list");
+      personWiseBox.innerHTML = "";
+
+      if (targetAamaal) {
+        const logsForSelectedDate = allLogsForAamaal.filter(
+          l => l.aamaalId === targetAamaal.id && l.dateKey === adminFilterDate
+        );
+        const logByMember = {};
+        logsForSelectedDate.forEach(l => { logByMember[l.memberId] = l; });
+
+        const totalDateCount = logsForSelectedDate.reduce((s, l) => s + Number(l.count || 0), 0);
+
+        const summaryBanner = document.createElement("div");
+        summaryBanner.style.cssText = "background:#f8fafc;padding:10px 12px;border-radius:12px;margin-bottom:10px;font-size:12.5px;font-weight:700;color:#0f766e;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;";
+        summaryBanner.innerHTML = `
+          <span>📅 ${formatAnyDatePretty(adminFilterDate)}</span>
+          <span>Done: ${logsForSelectedDate.length}/${allMembers.length} • Total: ${totalDateCount.toLocaleString('en-US')}</span>
+        `;
+        personWiseBox.appendChild(summaryBanner);
+
+        const sortedMembers = [...allMembers].sort((a, b) => {
+          const cA = logByMember[a.id] ? logByMember[a.id].count : 0;
+          const cB = logByMember[b.id] ? logByMember[b.id].count : 0;
+          if (cB !== cA) return cB - cA;
+          return getClearMemberName(a, memberMap).localeCompare(getClearMemberName(b, memberMap));
+        });
+
+        sortedMembers.forEach(m => {
+          const logEntry = logByMember[m.id];
+          const count = logEntry ? Number(logEntry.count) : 0;
+          const clearName = getClearMemberName(m, memberMap);
+          const flag = getMemberFlag(m, memberMap);
+
+          const row = document.createElement("div");
+          row.className = "admin-sub-row";
+          row.innerHTML = `
+            <div class="admin-row-top">
+              <div>
+                <div style="font-weight:700;font-size:14px;color:#1e293b;">
+                  ${count > 0 ? '✅' : '⏳'} ${flag} ${clearName}
+                </div>
+                <div style="font-size:11px;color:#64748b;">
+                  Count: <strong style="color:${count > 0 ? '#0f766e' : '#ef4444'};font-size:13px;">${count.toLocaleString('en-US')}</strong>
+                  • ${getMemberCountry(m, memberMap)} • Privacy: ${m.privacy}
+                </div>
+              </div>
+              <div class="admin-btn-group">
+                <button class="mini-btn teal admin-edit-log-btn">✏️ ${count > 0 ? 'Edit' : 'Log'}</button>
+                ${count > 0 ? `<button class="mini-btn danger admin-del-log-btn">🗑️</button>` : ''}
+              </div>
+            </div>
+          `;
+
+          row.querySelector(".admin-edit-log-btn").addEventListener("click", async () => {
+            const defaultVal = count > 0 ? count : targetAamaal.target;
+            const input = prompt(`Enter ${targetAamaal.name} count for ${clearName} on ${adminFilterDate}:`, defaultVal);
+            if (input === null) return;
+            const newCount = Number(input);
+            if (isNaN(newCount) || newCount < 0) return alert("Please enter a valid number.");
+
+            const logId = `${adminFilterDate}_${targetAamaal.id}_${m.id}`;
+            if (newCount === 0) {
+              await deleteDoc(doc(db, "logs", logId));
+            } else {
+              await setDoc(doc(db, "logs", logId), {
+                id: logId,
+                aamaalId: targetAamaal.id,
+                memberId: m.id,
+                parentUid: m.parentUid || m.id,
+                dateKey: adminFilterDate,
+                count: newCount,
+                updatedAt: Date.now()
+              }, { merge: true });
+            }
+            await loadLogsAndRender(false);
+          });
+
+          const delLogBtn = row.querySelector(".admin-del-log-btn");
+          if (delLogBtn) {
+            delLogBtn.addEventListener("click", async () => {
+              if (!confirm(`Delete ${clearName}'s count (${count}) for ${adminFilterDate}?`)) return;
+              const logId = `${adminFilterDate}_${targetAamaal.id}_${m.id}`;
+              await deleteDoc(doc(db, "logs", logId));
+              await loadLogsAndRender(false);
+            });
+          }
+
+          personWiseBox.appendChild(row);
+        });
+      }
+
+      renderAdminMemberMonthlyReport();
+
+      const reportTbody = document.getElementById("admin-report-tbody");
+      reportTbody.innerHTML = "";
+      allAamaalRaw.forEach(a => {
+        const logsForA = allLogsForAamaal.filter(l => l.aamaalId === a.id);
+        const sum7 = logsForA.filter(l => keys7.has(l.dateKey)).reduce((s, l) => s + Number(l.count || 0), 0);
+        const sum30 = logsForA.filter(l => keys30.has(l.dateKey)).reduce((s, l) => s + Number(l.count || 0), 0);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${a.name}</td>
+          <td>${sum7.toLocaleString('en-US')}</td>
+          <td>${sum30.toLocaleString('en-US')}</td>
+        `;
+        reportTbody.appendChild(tr);
+      });
+
+      const aamaalAdminList = document.getElementById("admin-aamaal-list");
+      aamaalAdminList.innerHTML = "";
+      allAamaalRaw.forEach(a => {
+        const isPaused = a.active === false;
+        const div = document.createElement("div");
+        div.className = "admin-sub-row";
+        div.innerHTML = `
+          <div class="admin-row-top">
+            <div>
+              <div style="font-weight:700;font-size:14px;">${a.name} (Target: ${a.target})</div>
+              <div style="font-family:'Amiri',serif;font-size:16px;color:#475569;">${a.arabic}</div>
+            </div>
+            <span class="pill-tag ${isPaused ? 'paused' : ''}">${isPaused ? 'Paused' : 'Active'}</span>
+          </div>
+          <div class="admin-btn-group">
+            <button class="mini-btn edit-a-btn">✏️ Edit</button>
+            <button class="mini-btn ${isPaused ? 'teal' : 'danger'} toggle-a-btn">
+              ${isPaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+            <button class="mini-btn danger delete-a-btn">🗑️ Delete</button>
+          </div>
+        `;
+        div.querySelector(".edit-a-btn").addEventListener("click", () => {
+          document.getElementById("aamaal-form-title").textContent = `✏️ Edit: ${a.name}`;
+          document.getElementById("edit-aamaal-id").value = a.id;
+          document.getElementById("aamaal-name-input").value = a.name;
+          document.getElementById("aamaal-arabic-input").value = a.arabic;
+          document.getElementById("aamaal-target-input").value = a.target;
+          document.getElementById("cancel-edit-aamaal-btn").classList.remove("hidden");
+        });
+        div.querySelector(".toggle-a-btn").addEventListener("click", async () => {
+          await updateDoc(doc(db, "aamaal", a.id), { active: isPaused });
+          await loadAamaalTabs();
+          populateAdminDropdowns();
+          populateUserMonthlyDropdowns();
+          await loadLogsAndRender(false);
+        });
+        div.querySelector(".delete-a-btn").addEventListener("click", async () => {
+          if (!confirm(`Are you sure you want to delete "${a.name}"?`)) return;
+          await deleteDoc(doc(db, "aamaal", a.id));
+          await loadAamaalTabs();
+          populateAdminDropdowns();
+          populateUserMonthlyDropdowns();
+          await loadLogsAndRender(false);
+        });
+        aamaalAdminList.appendChild(div);
+      });
+
+      const memBox = document.getElementById("admin-members-list");
+      memBox.innerHTML = "";
+      allMembers.forEach(m => {
+        const clearName = getClearMemberName(m, memberMap);
+        const flag = getMemberFlag(m, memberMap);
+        const country = getMemberCountry(m, memberMap);
+        const parent = memberMap[m.parentUid];
+        const isAdminRole = m.role === "admin";
+        const userLogCount = allLogsForAamaal.filter(l => l.memberId === m.id).length;
+        const isSelfPrimary = (m.id === currentUser.uid);
+
+        const row = document.createElement("div");
+        row.className = "admin-sub-row";
+        row.innerHTML = `
+          <div class="admin-row-top">
+            <div>
+              <div style="font-weight:700;font-size:14px;">
+                ${flag} ${clearName} ${isAdminRole ? '👑' : ''} ${isSelfPrimary ? '(You)' : ''}
+              </div>
+              <div style="font-size:11.5px;color:#64748b;">
+                ${m.isPrimary ? 'Core Member' : `Family (via ${parent ? parent.name : 'Member'})`} • ${country} ${m.phone ? `• 📱 ${m.phone}` : ''} • Privacy: <strong style="text-transform:capitalize;">${m.privacy}</strong> • Logs: <strong>${userLogCount}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="admin-btn-group" style="margin-top:4px;">
+            <button class="mini-btn rename-mem-btn">✏️ Rename</button>
+            <button class="mini-btn warning reset-user-logs-btn">🔄 Reset Data (${userLogCount})</button>
+            ${m.isPrimary && !isSelfPrimary ? `<button class="mini-btn teal role-btn">${isAdminRole ? 'Remove Admin' : 'Make Admin'}</button>` : ''}
+            ${!isSelfPrimary ? `<button class="mini-btn danger del-mem-btn">🗑️ Remove Member</button>` : ''}
+          </div>
+        `;
+
+        row.querySelector(".rename-mem-btn").addEventListener("click", async () => {
+          const newName = prompt("Enter the exact name you want displayed (e.g., Afzal's Mom):", clearName);
+          if (!newName || !newName.trim()) return;
+          await updateDoc(doc(db, "members", m.id), {
+            name: newName.trim(),
+            customNameLocked: true
+          });
+          await loadMembersAndProfiles(activeProfile.id);
+          populateAdminDropdowns();
+          renderDailyScreen(false);
+          renderStatsScreen();
+          renderAdminScreen();
+        });
+
+        row.querySelector(".reset-user-logs-btn").addEventListener("click", async () => {
+          const userLogs = allLogsForAamaal.filter(l => l.memberId === m.id);
+          if (userLogs.length === 0) {
+            return alert(`${clearName} has no recitation logs to reset.`);
+          }
+          if (!confirm(`⚠️ Reset ALL ${userLogs.length} recitation logs for "${clearName}"? (Other members' data will NOT be touched).`)) return;
+          for (const logItem of userLogs) {
+            await deleteDoc(doc(db, "logs", logItem.id));
+          }
+          alert(`All recitation logs for "${clearName}" have been reset to 0.`);
+          await loadLogsAndRender(false);
+        });
+
+        const roleBtn = row.querySelector(".role-btn");
+        if (roleBtn) {
+          roleBtn.addEventListener("click", async () => {
+            await updateDoc(doc(db, "members", m.id), { role: isAdminRole ? "member" : "admin" });
+            await loadMembersAndProfiles(activeProfile.id);
+            renderAdminScreen();
+          });
+        }
+
+        const delBtn = row.querySelector(".del-mem-btn");
+        if (delBtn) {
+          delBtn.addEventListener("click", async () => {
+            const dependentFamily = m.isPrimary ? allMembers.filter(f => !f.isPrimary && f.parentUid === m.id) : [];
+            const confirmMsg = m.isPrimary
+              ? `⚠️ Remove Core Member "${clearName}"${dependentFamily.length > 0 ? ` along with their ${dependentFamily.length} family profile(s)` : ""} and all their recitation logs?`
+              : `Remove family member "${clearName}" and all their logs?`;
+
+            if (!confirm(confirmMsg)) return;
+
+            const idsToRemove = new Set([m.id, ...dependentFamily.map(f => f.id)]);
+            const logsToDelete = allLogsForAamaal.filter(l => idsToRemove.has(l.memberId));
+
+            for (const logItem of logsToDelete) {
+              await deleteDoc(doc(db, "logs", logItem.id));
+            }
+            for (const remId of idsToRemove) {
+              await deleteDoc(doc(db, "members", remId));
+            }
+
+            await loadMembersAndProfiles(currentUser.uid);
+            populateAdminDropdowns();
+            await loadLogsAndRender(false);
+          });
+        }
+        memBox.appendChild(row);
+      });
+    }
+
+    document.getElementById("copy-whatsapp-btn").addEventListener("click", async () => {
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const targetAamaal = allAamaalRaw.find(a => a.id === adminFilterAamaalId) || allAamaalRaw[0];
+      if (!targetAamaal) return;
+
+      const logsForDate = allLogsForAamaal.filter(
+        l => l.aamaalId === targetAamaal.id && l.dateKey === adminFilterDate
+      );
+      const logByMember = {};
+      logsForDate.forEach(l => { logByMember[l.memberId] = l; });
+
+      const totalCount = logsForDate.reduce((s, l) => s + Number(l.count || 0), 0);
+
+      let lines = [];
+      lines.push(`🌙 *Islaah Foundation's Aamaal Circle*`);
+      lines.push(`📿 *Aamaal:* ${targetAamaal.name}`);
+      lines.push(`📅 *Date:* ${formatAnyDatePretty(adminFilterDate)}`);
+      lines.push(`────────────────────`);
+
+      allMembers.forEach(m => {
+        const c = logByMember[m.id] ? Number(logByMember[m.id].count) : 0;
+        const name = getClearMemberName(m, memberMap);
+        const flag = getMemberFlag(m, memberMap);
+        lines.push(`${c > 0 ? '✅' : '⏳'} ${flag} ${name}: *${c.toLocaleString('en-US')}*`);
+      });
+
+      lines.push(`────────────────────`);
+      lines.push(`✨ *Total Recited:* ${totalCount.toLocaleString('en-US')}`);
+
+      const textToCopy = lines.join("\n");
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        alert("✅ WhatsApp Report copied! You can now paste it directly in your WhatsApp group.");
+      } catch (e) {
+        prompt("Copy your WhatsApp report below:", textToCopy);
+      }
+    });
+
+    document.getElementById("export-excel-btn").addEventListener("click", () => {
+      if (allLogsForAamaal.length === 0) {
+        return alert("No recitation logs found to export yet.");
+      }
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const aamaalMap = {};
+      allAamaalRaw.forEach(a => { aamaalMap[a.id] = a.name; });
+
+      let csvRows = [];
+      csvRows.push(["Date", "Aamaal Name", "Member Name", "Country", "Member Type", "Added By (Core Member)", "Privacy Setting", "Recitation Count"].join(","));
+
+      const sortedLogs = [...allLogsForAamaal].sort((a, b) => b.dateKey.localeCompare(a.dateKey));
+
+      sortedLogs.forEach(l => {
+        const m = memberMap[l.memberId];
+        const parent = m ? memberMap[m.parentUid] : null;
+        const clearName = getClearMemberName(m, memberMap).replace(/"/g, '""');
+        const country = getMemberCountry(m, memberMap).replace(/"/g, '""');
+        const memType = (m && m.isPrimary) ? "Core Member" : "Family Member";
+        const parentName = (parent ? parent.name : "").replace(/"/g, '""');
+        const priv = m ? m.privacy : "public";
+        const aamaalName = (aamaalMap[l.aamaalId] || l.aamaalId).replace(/"/g, '""');
+        csvRows.push(`"${l.dateKey}","${aamaalName}","${clearName}","${country}","${memType}","${parentName}","${priv}",${l.count}`);
+      });
+
+      const blob = new Blob([csvRows.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `islaah_aamaal_report_${getLocalDateString()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    document.getElementById("wipe-database-btn").addEventListener("click", async () => {
+      if (!confirm("⚠️ This will delete ALL recitation logs for everyone in the circle so you can start fresh. Are you sure?")) return;
+      const snap = await getDocs(collection(db, "logs"));
+      for (const d of snap.docs) {
+        await deleteDoc(doc(db, "logs", d.id));
+      }
+      alert("Database wiped clean! Ready for fresh group testing.");
+      await loadLogsAndRender(true);
+    });
+
+    function resetAamaalForm() {
+      document.getElementById("aamaal-form-title").textContent = "+ Add New Aamaal";
+      document.getElementById("edit-aamaal-id").value = "";
+      document.getElementById("aamaal-name-input").value = "";
+      document.getElementById("aamaal-arabic-input").value = "";
+      document.getElementById("aamaal-target-input").value = "";
+      document.getElementById("cancel-edit-aamaal-btn").classList.add("hidden");
+    }
+
+    document.getElementById("cancel-edit-aamaal-btn").addEventListener("click", resetAamaalForm);
+
+    document.getElementById("save-aamaal-btn").addEventListener("click", async () => {
+      const editId = document.getElementById("edit-aamaal-id").value.trim();
+      const name = document.getElementById("aamaal-name-input").value.trim();
+      const arabic = document.getElementById("aamaal-arabic-input").value.trim();
+      const target = Number(document.getElementById("aamaal-target-input").value);
+
+      if (!name || !arabic || !target || target <= 0) {
+        return alert("Please enter the Aamaal name, Arabic text, and a valid daily target number.");
+      }
+
+      const id = editId || ("aamaal_" + Date.now());
+      const existing = allAamaalRaw.find(a => a.id === id);
+      await setDoc(doc(db, "aamaal", id), {
+        id,
+        name,
+        arabic,
+        target,
+        order: existing ? existing.order : (allAamaalRaw.length + 1),
+        active: existing ? existing.active : true
+      }, { merge: true });
+
+      resetAamaalForm();
+      await loadAamaalTabs();
+      populateAdminDropdowns();
+      populateUserMonthlyDropdowns();
+      await loadLogsAndRender(false);
+      alert("Aamaal saved!");
+    });
+
+    document.getElementById("open-user-monthly-btn").addEventListener("click", () => {
+      if (activeAamaal) userMonthlyAamaalId = activeAamaal.id;
+      populateUserMonthlyDropdowns();
+      renderUserMonthlyReport();
+      document.getElementById("daily-view").classList.add("hidden");
+      document.getElementById("stats-view").classList.add("hidden");
+      document.getElementById("admin-view").classList.add("hidden");
+      document.getElementById("user-monthly-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    document.getElementById("back-from-user-monthly-btn").addEventListener("click", () => {
+      document.getElementById("user-monthly-view").classList.add("hidden");
+      document.getElementById("daily-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    document.getElementById("open-stats-btn").addEventListener("click", () => {
+      renderStatsScreen();
+      document.getElementById("daily-view").classList.add("hidden");
+      document.getElementById("user-monthly-view").classList.add("hidden");
+      document.getElementById("admin-view").classList.add("hidden");
+      document.getElementById("stats-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    document.getElementById("back-to-daily-btn").addEventListener("click", () => {
+      document.getElementById("stats-view").classList.add("hidden");
+      document.getElementById("user-monthly-view").classList.add("hidden");
+      document.getElementById("admin-view").classList.add("hidden");
+      document.getElementById("daily-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    document.getElementById("admin-badge").addEventListener("click", () => {
+      populateAdminDropdowns();
+      renderAdminScreen();
+      document.getElementById("daily-view").classList.add("hidden");
+      document.getElementById("user-monthly-view").classList.add("hidden");
+      document.getElementById("stats-view").classList.add("hidden");
+      document.getElementById("admin-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    document.getElementById("back-from-admin-btn").addEventListener("click", () => {
+      document.getElementById("admin-view").classList.add("hidden");
+      document.getElementById("daily-view").classList.remove("hidden");
+      window.scrollTo(0, 0);
+    });
+
+    const settingsModal = document.getElementById("settings-modal");
+    const privacyOptions = document.querySelectorAll(".privacy-option");
+
+    function highlightPrivacyOption(priv) {
+      privacyOptions.forEach(opt => {
+        const isMatch = opt.dataset.privacy === priv;
+        opt.classList.toggle("selected", isMatch);
+        opt.querySelector(".check-mark").textContent = isMatch ? "✓" : "";
+      });
+    }
+
+    privacyOptions.forEach(opt => {
+      opt.addEventListener("click", () => {
+        selectedPrivacy = opt.dataset.privacy;
+        highlightPrivacyOption(selectedPrivacy);
+      });
+    });
+
+    function openSettingsModal() {
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const currentClearName = getClearMemberName(activeProfile, memberMap);
+      const currentCountry = getMemberCountry(activeProfile, memberMap);
+      document.getElementById("privacy-target-name").textContent = currentClearName;
+      document.getElementById("edit-current-profile-name").value = currentClearName;
+      document.getElementById("edit-current-profile-country").value = currentCountry;
+      highlightPrivacyOption(activeProfile.privacy || "public");
+      settingsModal.classList.remove("hidden");
+    }
+
+    document.getElementById("open-settings-btn").addEventListener("click", () => openSettingsModal());
+    document.getElementById("close-settings-btn").addEventListener("click", () => settingsModal.classList.add("hidden"));
+
+    document.getElementById("save-profile-name-btn").addEventListener("click", async () => {
+      const nameInput = document.getElementById("edit-current-profile-name");
+      const countrySelect = document.getElementById("edit-current-profile-country");
+      const newName = nameInput.value.trim();
+      const newCountry = countrySelect.value;
+      const newFlag = COUNTRY_FLAGS[newCountry] || "🇮🇳";
+      if (!newName) return alert("Please enter a valid display name.");
+
+      await updateDoc(doc(db, "members", activeProfile.id), {
+        name: newName,
+        customNameLocked: true,
+        country: newCountry,
+        flag: newFlag,
+        countryLocked: true
+      });
+      activeProfile.name = newName;
+      activeProfile.customNameLocked = true;
+      activeProfile.country = newCountry;
+      activeProfile.flag = newFlag;
+      activeProfile.countryLocked = true;
+
+      await loadMembersAndProfiles(activeProfile.id);
+      populateAdminDropdowns();
+      document.getElementById("privacy-target-name").textContent = newName;
+      renderDailyScreen(false);
+      renderStatsScreen();
+      renderAdminScreen();
+      alert(`Profile updated to "${newFlag} ${newName}"!`);
+    });
+
+    document.getElementById("add-family-btn").addEventListener("click", async () => {
+      const input = document.getElementById("new-family-name");
+      const rawName = input.value.trim();
+      if (!rawName) return alert("Please enter a family member's name or relation (e.g., Mom, Wife).");
+
+      const memberMap = {};
+      allMembers.forEach(m => { memberMap[m.id] = m; });
+      const primary = myProfiles.find(p => p.isPrimary) || { name: currentUser.displayName || "Member" };
+      const parentCountry = getMemberCountry(primary, memberMap);
+      const parentFlag = getMemberFlag(primary, memberMap);
+
+      const preferredName = getPreferredGivenName(primary.name);
+      const hasCustomApostrophe = rawName.includes("'s") || rawName.includes("’s");
+      const formattedName = (hasCustomApostrophe || rawName.toLowerCase().includes(preferredName.toLowerCase()))
+        ? rawName
+        : `${preferredName}'s ${rawName}`;
+
+      const famId = currentUser.uid + "_fam_" + Date.now();
+      await setDoc(doc(db, "members", famId), {
+        id: famId,
+        parentUid: currentUser.uid,
+        isPrimary: false,
+        name: formattedName,
+        customNameLocked: true,
+        country: parentCountry,
+        flag: parentFlag,
+        email: "",
+        privacy: "public",
+        role: "family",
+        createdAt: Date.now()
+      });
+      input.value = "";
+      await loadMembersAndProfiles(famId);
+      populateAdminDropdowns();
+      document.getElementById("edit-current-profile-name").value = formattedName;
+      document.getElementById("edit-current-profile-country").value = parentCountry;
+      document.getElementById("privacy-target-name").textContent = formattedName;
+      highlightPrivacyOption(activeProfile.privacy);
+      alert(`"${parentFlag} ${formattedName}" added!`);
+    });
+
+    document.getElementById("save-settings-btn").addEventListener("click", async () => {
+      const nameInput = document.getElementById("edit-current-profile-name");
+      const countrySelect = document.getElementById("edit-current-profile-country");
+      const newName = nameInput.value.trim();
+      const newCountry = countrySelect.value;
+      const newFlag = COUNTRY_FLAGS[newCountry] || "🇮🇳";
+
+      const updates = {
+        privacy: selectedPrivacy,
+        country: newCountry,
+        flag: newFlag,
+        countryLocked: true
+      };
+      if (newName && newName !== activeProfile.name) {
+        updates.name = newName;
+        updates.customNameLocked = true;
+      }
+
+      if (activeProfile) {
+        await updateDoc(doc(db, "members", activeProfile.id), updates);
+        activeProfile.privacy = selectedPrivacy;
+        activeProfile.country = newCountry;
+        activeProfile.flag = newFlag;
+        activeProfile.countryLocked = true;
+        if (updates.name) {
+          activeProfile.name = updates.name;
+          activeProfile.customNameLocked = true;
+        }
+      }
+      isFirstLogin = false;
+      await loadMembersAndProfiles(activeProfile.id);
+      populateAdminDropdowns();
+      renderStatsScreen();
+      renderAdminScreen();
+      settingsModal.classList.add("hidden");
+    });
+
+    document.getElementById("signout-btn").addEventListener("click", async () => {
+      await signOut(auth);
+      settingsModal.classList.add("hidden");
+    });
+  </script>
+</body>
+</html>
