@@ -3215,8 +3215,9 @@
       });
 
       lines.push(`────────────────────`);
-      lines.push(`✨ *Total Recited:* ${totalCount.toLocaleString('en-US')}`);
-
+   lines.push(`✨ *Total Recited:* ${totalCount.toLocaleString('en-US')}`);
+lines.push(`Please recite your daily durood shareef and update the count in below link`);
+      lines.push(`https://islaahfoundation.github.io/aamaal-circle/`);
       const textToCopy = lines.join("\n");
       try {
         await navigator.clipboard.writeText(textToCopy);
